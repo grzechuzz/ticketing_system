@@ -38,7 +38,8 @@ Natomiast nie będziemy mieli opcji ...........
 Główne cele biznesowe:
 - Skrócenie czasu wdrożenia organizatorów. System ma umożliwiać utworzenie i opublikowanie wydarzenia w czasie krótszym niż 5 minut.
 Kryterium akceptacji: 80% nowych organizatorów pomyślnie publikuje swoje pierwsze wydarzenie w czasie mniejszym niż 5 minut w pierwszym miesiącu od uruchomienia produktu80%
-- DRUGI CEL BIZNESOWY
+- Zwiększenie efektywności sprzedaży miejsc siedzących. System ma minimalizować liczbę niesprzedanych pojedynczych miejsc poprzez inteligentną alokację miejsc.
+Kryterium akceptacji: Liczba pozostawionych wolnych miejsc w sektorach siedzących jest mniejsza niż 5% całkowitej liczby miejsc w tych sektorach po zakończeniu sprzedaży wydarzenia.
 
 Główne cele użytkowników:
 - Szybkie utworzenie wydarzenia bez konieczności dodatkowego szkolenia. System ma poprowadzić użutkownika krok po kroku wraz z wskazówkami na każdym etapie.
@@ -61,3 +62,18 @@ Organizator - użytkownik systemu posiadający uprawnienia do tworzenia i zarzą
 
 
 ### 2. Opis ogólny
+
+**2.1. Główne funkcje produktu**
+- **Zarządzanie wydarzeniami**: utworzenie wydarzenia oraz jego publikacja
+- **Przegląd wydarzeń**: lista wydarzeń i szczegółowy widok planu miejsc
+- **Zakup biletów**: system umożliwia klientowi zakup biletów na różne typy wydarzeń
+- **Inteligentna alokacja miejsc**: w przypadku zakupu biletów z przypisanym miejscem system może automatycznie podpowiadać miejsca, stosując politykę minimalizacji pozostawiania pojedynczych wolnych miejsc
+  
+**2.2. Klasy użytkowników**
+- **Klient**: przegląda wydarzenia, kupuje i rezerwuje bilety
+- **Organizator**: tworzy i publikuje wydarzenia, konfiguruje pulę biletów i ceny 
+- **Administrator**: odpowiada za konfigurację systemu oraz akceptowanie publikowanych wydarzeń
+
+**2.3. Ograniczenia projektowe**
+- **Ograniczenia organizacyjne**: projekt musi zostać zrealizowany w krótkim czasie ok. 1-2 miesięcy. Nie ma możliwości implementacji wszystkich funkcji spotykanych w komercyjnych systemach biletowych
+
