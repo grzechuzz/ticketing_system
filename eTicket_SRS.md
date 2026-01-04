@@ -1,5 +1,4 @@
 TODO
-1.1  Czy tutaj pisać że ja, ty, klienci czy w taki sposób jaki jest xd
 1.2.2 Okreslic czego system nie bedzie robil
 * **Poza Zakresem:** Jasno określcie, czego system nie będzie robił, aby uniknąć nieporozumień.
 1.2.3 dodac cel biznesowy i uzytkownika ten swój mozesz xd
@@ -75,5 +74,49 @@ Organizator - użytkownik systemu posiadający uprawnienia do tworzenia i zarzą
 - **Administrator**: odpowiada za konfigurację systemu oraz akceptowanie publikowanych wydarzeń
 
 **2.3. Ograniczenia projektowe**
-- **Ograniczenia organizacyjne**: projekt musi zostać zrealizowany w krótkim czasie ok. 1-2 miesięcy. Nie ma możliwości implementacji wszystkich funkcji spotykanych w komercyjnych systemach biletowych
+
+**2.3.1. Ograniczenia organizacyjne:**
+**Ograniczenie:**
+Projekt musi zostać zrealizowany w krótkim czasie ok. 1-2 miesięcy. Nie ma możliwości implementacji wszystkich funkcji spotykanych w komercyjnych systemach biletowych.
+**Źródło:**
+Edukacyjny charakter projektu oraz ograniczone ilość członków zespołu.
+**Wpływ na architekturę:**
+* Konieczność znacznego zmniejszenia funkcji – rezygnacja z bardziej skomplikowanych opcji
+* Konieczność wyboru sprawdzonych technologii zamiast eksperymentowania z nowymi rozwiązaniami
+* Wyklucza zaawansowane funkcje optymalizacyjne
+<br>
+
+**2.3.2. Ograniczenie technologiczne:**
+**Ograniczenie:**
+System musi być zbudowany z wykorzystaniem Java + Spring Framework (backend), React (frontend) oraz PostgreSQL (baza danych).
+**Źródło:**
+Postanowienie grupy programistów oparte na umiejętnościach i wiedzy osób w zespole.
+**Wpływ na architekturę:**
+* Wymusza architekturę klient-serwer z REST API jako warstwą komunikacji
+* Wymusza wykorzystanie mechanizmów transakcyjnych ACID do obsługi rezerwacji biletów
+* Ogranicza możliwość wykorzystania innych frameworków (np. Django)
+<br>
+
+**2.3.3. Ograniczenie biznesowe:**
+**Ograniczenie:**
+Całkowity budżet na hosting, infrastrukturę i zewnętrzne usługi wynosi 0 PLN miesięcznie.
+**Źródło:**
+Projekt akademicki bez finansowania zewnętrznego, brak sponsorów, brak możliwości ponoszenia kosztów przez studentów.
+**Wpływ na architekturę:**
+* Konieczność wykorzystania wyłącznie darmowych planów dostawców chmury
+* Ograniczenia w zakresie wydajności (mniejsze maszyny, wolniejsze bazy danych)
+* Wyklucza możliwość automatycznych backupów bazy danych
+<br>
+
+**2.3.4. Ograniczenie prawne:**
+**Ograniczenie:**
+System musi być zgodny z Rozporządzeniem o Ochronie Danych Osobowych (RODO), a wszystkie dane osobowe użytkowników (organizatorów i uczestników) muszą być fizycznie przechowywane na serwerach zlokalizowanych w granicach Europejskiego Obszaru Gospodarczego (EOG).
+**Źródło:**
+Prawo Unii Europejskiej.
+**Wpływ na architekturę:**
+* Drastycznie zawęża wybór dostawców usług chmurowych do tych, którzy posiadają centra danych w EOG
+* Wymusza implementację mechanizmów do obsługi praw użytkowników (prawo do bycia zapomnianym, prawo do eksportu danych), co musi być uwzględnione w projekcie bazy danych i API
+* Narzuca konieczność anonimizacji danych w środowiskach deweloperskich i testowych
+
+**2.3. Założenia projektowe**
 
