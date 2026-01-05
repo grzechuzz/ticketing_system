@@ -1,7 +1,7 @@
 TODO
+1.2.3 tam był dodal że nie liczba wolnych miejsc, tylko pojedynczych??? wiesz ocb
 1.2.2 Okreslic czego system nie bedzie robil
 * **Poza Zakresem:** Jasno określcie, czego system nie będzie robił, aby uniknąć nieporozumień.
-1.2.3 dodac cel biznesowy i uzytkownika ten swój mozesz xd
 1.3 aktualizować słowniczek na bieżąco
 1.4 co zawierają kolejne rozdziały na koniec sie zrobi
 
@@ -36,7 +36,7 @@ Natomiast nie będziemy mieli opcji ...........
 **1.2.3. Cele Produktu:**
 Główne cele biznesowe:
 - Skrócenie czasu wdrożenia organizatorów. System ma umożliwiać utworzenie i opublikowanie wydarzenia w czasie krótszym niż 5 minut.
-Kryterium akceptacji: 80% nowych organizatorów pomyślnie publikuje swoje pierwsze wydarzenie w czasie mniejszym niż 5 minut w pierwszym miesiącu od uruchomienia produktu80%
+Kryterium akceptacji: 80% nowych organizatorów pomyślnie publikuje swoje pierwsze wydarzenie w czasie mniejszym niż 5 minut w pierwszym miesiącu od uruchomienia produktu 80%.
 - Zwiększenie efektywności sprzedaży miejsc siedzących. System ma minimalizować liczbę niesprzedanych pojedynczych miejsc poprzez inteligentną alokację miejsc.
 Kryterium akceptacji: Liczba pozostawionych wolnych miejsc w sektorach siedzących jest mniejsza niż 5% całkowitej liczby miejsc w tych sektorach po zakończeniu sprzedaży wydarzenia.
 
@@ -118,5 +118,25 @@ Prawo Unii Europejskiej.
 * Wymusza implementację mechanizmów do obsługi praw użytkowników (prawo do bycia zapomnianym, prawo do eksportu danych), co musi być uwzględnione w projekcie bazy danych i API
 * Narzuca konieczność anonimizacji danych w środowiskach deweloperskich i testowych
 
-**2.3. Założenia projektowe**
+**2.4. Założenia projektowe**
 
+**2.4.1. Założenie dotyczące użyteczności**
+*   **Założenie:** Zakładamy, że interfejs użytkownika będzie tak łatwy do zrozumienia, że 80% nowych organizatorów (bez wcześniejszego szkolenia) będzie w stanie utworzyć i opublikować wydarzenie w czasie krótszym niż 5 minut.
+*   **Ryzyko:** Jeśli okaże się, że interfejs jest zbyt skomplikowany to cel biznesowy projektu (zapewnienie prostego narzędzia) nie zostanie osiągnięty, co poskutkuje zniechęceniem użytkowników, rezygnacją z platformy.
+*   **Plan walidacji:**
+    *   **Co:** Przeprowadzenie testów użyteczności z pomiarem czasu.
+    *   **Jak:** Przeprowadzenie scenariusza testowego na grupie 10 osób nieznających systemu. Użytkownicy otrzymują dane wydarzenia i muszą je wprowadzić. Mierzymy czas stoperem.
+    *   **Kiedy:** Przed finalnym wydaniem projektu, po stworzeniu funkcjonalnego prototypu interfejsu.
+    *   **Kto:** Jeden z testerów.
+<br>
+
+**2.4.2. Założenie algorytmiczne**
+*   **Założenie:** Zakładamy, że algorytm przypisywania miejsc, który będzie automatycznie przypisywał miejsca siedzące kupującym w sposób unikający powstawania pojedynczych wolnych miejsc, pozostawi mniej niż 5% wolnych miejsc w wyprzedanych sektorach
+*   **Ryzyko:** Jeśli algorytm okaże się nieskuteczny i będzie pozostawiać liczne pojedyncze wolne miejsca między zajętymi, organizatorzy stracą potencjalny przychód ze sprzedaży biletów. Dla użytkowników może to prowadzić do porzucenia koszyka zakupowego w sytuacji, gdy wymuszony jest wybór miejsc obok kogoś, gdy wolą odstęp
+*   **Plan walidacji:**
+    *   **Co:** Symulacja procesu sprzedaży biletów.
+    *   **Jak:** Napisanie testu, który generuje 1000 losowych prób zakupu biletów dla różnych konfiguracji tj. pojedyncze bilety, dla 3-5 osobowych grup itp., przestrzegając zaimplementowanych reguł. Na koniec skrypt zlicza procent niesprzedanych miejsc.
+    *   **Kiedy:** Przed rozpoczęciem prac nad warstwą wizualną wyboru miejsc.
+    *   **Kto:** Developer odpowiedzialny za moduł rezerwacji.
+
+### 3. Wymagania Funkcjonalne
