@@ -1,8 +1,7 @@
 TODO
-1.1  Czy tutaj pisać że ja, ty, klienci czy w taki sposób jaki jest xd
+1.2.3 tam był dodal że nie liczba wolnych miejsc, tylko pojedynczych??? wiesz ocb
 1.2.2 Okreslic czego system nie bedzie robil
 * **Poza Zakresem:** Jasno określcie, czego system nie będzie robił, aby uniknąć nieporozumień.
-1.2.3 dodac cel biznesowy i uzytkownika ten swój mozesz xd
 1.3 aktualizować słowniczek na bieżąco
 1.4 co zawierają kolejne rozdziały na koniec sie zrobi
 
@@ -37,7 +36,7 @@ Natomiast nie będziemy mieli opcji ...........
 **1.2.3. Cele Produktu:**
 Główne cele biznesowe:
 - Skrócenie czasu wdrożenia organizatorów. System ma umożliwiać utworzenie i opublikowanie wydarzenia w czasie krótszym niż 5 minut.
-Kryterium akceptacji: 80% nowych organizatorów pomyślnie publikuje swoje pierwsze wydarzenie w czasie mniejszym niż 5 minut w pierwszym miesiącu od uruchomienia produktu80%
+Kryterium akceptacji: 80% nowych organizatorów pomyślnie publikuje swoje pierwsze wydarzenie w czasie mniejszym niż 5 minut w pierwszym miesiącu od uruchomienia produktu 80%.
 - Zwiększenie efektywności sprzedaży miejsc siedzących. System ma minimalizować liczbę niesprzedanych pojedynczych miejsc poprzez inteligentną alokację miejsc.
 Kryterium akceptacji: Liczba pozostawionych wolnych miejsc w sektorach siedzących jest mniejsza niż 5% całkowitej liczby miejsc w tych sektorach po zakończeniu sprzedaży wydarzenia.
 
@@ -75,5 +74,69 @@ Organizator - użytkownik systemu posiadający uprawnienia do tworzenia i zarzą
 - **Administrator**: odpowiada za konfigurację systemu oraz akceptowanie publikowanych wydarzeń
 
 **2.3. Ograniczenia projektowe**
-- **Ograniczenia organizacyjne**: projekt musi zostać zrealizowany w krótkim czasie ok. 1-2 miesięcy. Nie ma możliwości implementacji wszystkich funkcji spotykanych w komercyjnych systemach biletowych
 
+**2.3.1. Ograniczenia organizacyjne:**
+**Ograniczenie:**
+Projekt musi zostać zrealizowany w krótkim czasie ok. 1-2 miesięcy. Nie ma możliwości implementacji wszystkich funkcji spotykanych w komercyjnych systemach biletowych.
+**Źródło:**
+Edukacyjny charakter projektu oraz ograniczone ilość członków zespołu.
+**Wpływ na architekturę:**
+* Konieczność znacznego zmniejszenia funkcji – rezygnacja z bardziej skomplikowanych opcji
+* Konieczność wyboru sprawdzonych technologii zamiast eksperymentowania z nowymi rozwiązaniami
+* Wyklucza zaawansowane funkcje optymalizacyjne
+<br>
+
+**2.3.2. Ograniczenie technologiczne:**
+**Ograniczenie:**
+System musi być zbudowany z wykorzystaniem Java + Spring Framework (backend), React (frontend) oraz PostgreSQL (baza danych).
+**Źródło:**
+Postanowienie grupy programistów oparte na umiejętnościach i wiedzy osób w zespole.
+**Wpływ na architekturę:**
+* Wymusza architekturę klient-serwer z REST API jako warstwą komunikacji
+* Wymusza wykorzystanie mechanizmów transakcyjnych ACID do obsługi rezerwacji biletów
+* Ogranicza możliwość wykorzystania innych frameworków (np. Django)
+<br>
+
+**2.3.3. Ograniczenie biznesowe:**
+**Ograniczenie:**
+Całkowity budżet na hosting, infrastrukturę i zewnętrzne usługi wynosi 0 PLN miesięcznie.
+**Źródło:**
+Projekt akademicki bez finansowania zewnętrznego, brak sponsorów, brak możliwości ponoszenia kosztów przez studentów.
+**Wpływ na architekturę:**
+* Konieczność wykorzystania wyłącznie darmowych planów dostawców chmury
+* Ograniczenia w zakresie wydajności (mniejsze maszyny, wolniejsze bazy danych)
+* Wyklucza możliwość automatycznych backupów bazy danych
+<br>
+
+**2.3.4. Ograniczenie prawne:**
+**Ograniczenie:**
+System musi być zgodny z Rozporządzeniem o Ochronie Danych Osobowych (RODO), a wszystkie dane osobowe użytkowników (organizatorów i uczestników) muszą być fizycznie przechowywane na serwerach zlokalizowanych w granicach Europejskiego Obszaru Gospodarczego (EOG).
+**Źródło:**
+Prawo Unii Europejskiej.
+**Wpływ na architekturę:**
+* Drastycznie zawęża wybór dostawców usług chmurowych do tych, którzy posiadają centra danych w EOG
+* Wymusza implementację mechanizmów do obsługi praw użytkowników (prawo do bycia zapomnianym, prawo do eksportu danych), co musi być uwzględnione w projekcie bazy danych i API
+* Narzuca konieczność anonimizacji danych w środowiskach deweloperskich i testowych
+
+**2.4. Założenia projektowe**
+
+**2.4.1. Założenie dotyczące użyteczności**
+*   **Założenie:** Zakładamy, że interfejs użytkownika będzie tak łatwy do zrozumienia, że 80% nowych organizatorów (bez wcześniejszego szkolenia) będzie w stanie utworzyć i opublikować wydarzenie w czasie krótszym niż 5 minut.
+*   **Ryzyko:** Jeśli okaże się, że interfejs jest zbyt skomplikowany to cel biznesowy projektu (zapewnienie prostego narzędzia) nie zostanie osiągnięty, co poskutkuje zniechęceniem użytkowników, rezygnacją z platformy.
+*   **Plan walidacji:**
+    *   **Co:** Przeprowadzenie testów użyteczności z pomiarem czasu.
+    *   **Jak:** Przeprowadzenie scenariusza testowego na grupie 10 osób nieznających systemu. Użytkownicy otrzymują dane wydarzenia i muszą je wprowadzić. Mierzymy czas stoperem.
+    *   **Kiedy:** Przed finalnym wydaniem projektu, po stworzeniu funkcjonalnego prototypu interfejsu.
+    *   **Kto:** Jeden z testerów.
+<br>
+
+**2.4.2. Założenie algorytmiczne**
+*   **Założenie:** Zakładamy, że algorytm przypisywania miejsc, który będzie automatycznie przypisywał miejsca siedzące kupującym w sposób unikający powstawania pojedynczych wolnych miejsc, pozostawi mniej niż 5% wolnych miejsc w wyprzedanych sektorach
+*   **Ryzyko:** Jeśli algorytm okaże się nieskuteczny i będzie pozostawiać liczne pojedyncze wolne miejsca między zajętymi, organizatorzy stracą potencjalny przychód ze sprzedaży biletów. Dla użytkowników może to prowadzić do porzucenia koszyka zakupowego w sytuacji, gdy wymuszony jest wybór miejsc obok kogoś, gdy wolą odstęp
+*   **Plan walidacji:**
+    *   **Co:** Symulacja procesu sprzedaży biletów.
+    *   **Jak:** Napisanie testu, który generuje 1000 losowych prób zakupu biletów dla różnych konfiguracji tj. pojedyncze bilety, dla 3-5 osobowych grup itp., przestrzegając zaimplementowanych reguł. Na koniec skrypt zlicza procent niesprzedanych miejsc.
+    *   **Kiedy:** Przed rozpoczęciem prac nad warstwą wizualną wyboru miejsc.
+    *   **Kto:** Developer odpowiedzialny za moduł rezerwacji.
+
+### 3. Wymagania Funkcjonalne
