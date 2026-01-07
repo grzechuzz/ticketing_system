@@ -1,5 +1,4 @@
 TODO
-1.2.3 tam był dodal że nie liczba wolnych miejsc, tylko pojedynczych??? wiesz ocb
 1.2.2 Okreslic czego system nie bedzie robil
 * **Poza Zakresem:** Jasno określcie, czego system nie będzie robił, aby uniknąć nieporozumień.
 1.3 aktualizować słowniczek na bieżąco
@@ -38,7 +37,7 @@ Główne cele biznesowe:
 - Skrócenie czasu wdrożenia organizatorów. System ma umożliwiać utworzenie i opublikowanie wydarzenia w czasie krótszym niż 5 minut.
 Kryterium akceptacji: 80% nowych organizatorów pomyślnie publikuje swoje pierwsze wydarzenie w czasie mniejszym niż 5 minut w pierwszym miesiącu od uruchomienia produktu 80%.
 - Zwiększenie efektywności sprzedaży miejsc siedzących. System ma minimalizować liczbę niesprzedanych pojedynczych miejsc poprzez inteligentną alokację miejsc.
-Kryterium akceptacji: Liczba pozostawionych wolnych miejsc w sektorach siedzących jest mniejsza niż 5% całkowitej liczby miejsc w tych sektorach po zakończeniu sprzedaży wydarzenia.
+Kryterium akceptacji: Liczba pozostawionych wolnych pojedynczych miejsc w sektorach siedzących jest mniejsza niż 5% całkowitej liczby miejsc w tych sektorach po zakończeniu sprzedaży wydarzenia.
 
 Główne cele użytkowników:
 - Szybkie utworzenie wydarzenia bez konieczności dodatkowego szkolenia. System ma poprowadzić użutkownika krok po kroku wraz z wskazówkami na każdym etapie.
