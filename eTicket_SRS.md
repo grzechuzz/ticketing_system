@@ -22,7 +22,7 @@ Służy jako:
 
 **1.2. Wizja Produktu:**
 Każdy organizator bez względu na swoje możliwości finansowe i rozmiar ma prawo do prostego i bezkosztowego rozwiązania, które pozwoli mu skupić się na organizacji wydarzeń, a nie nauce nowej technologii.
-Z tego powodu przychodzimy z opracowaniem prostego i łatwego w obsłudze narzędzia eTicket 💪💪💪
+Z tego powodu przychodzimy z opracowaniem prostego i łatwego w obsłudze narzędzia eTicket 
 
 **1.2.2. Zakres Produktu:**
 Nasz system będzie platformą, która umożliwia:
@@ -67,6 +67,8 @@ Organizator - użytkownik systemu posiadający uprawnienia do tworzenia i zarzą
 - **Przegląd wydarzeń**: lista wydarzeń i szczegółowy widok planu miejsc
 - **Zakup biletów**: system umożliwia klientowi zakup biletów na różne typy wydarzeń
 - **Inteligentna alokacja miejsc**: w przypadku zakupu biletów z przypisanym miejscem system może automatycznie podpowiadać miejsca, stosując politykę minimalizacji pozostawiania pojedynczych wolnych miejsc
+- **Generowanie dokumentów**: automatyczne tworzenie dokumentów w formacie PDF, takich jak bilety z kodami QR oraz faktury
+- **Obsługa płatności**: przetwarzanie transakcji zakupu poprzez integrację z zewnętrznym operatorem płatności
   
 **2.2. Klasy użytkowników**
 - **Klient**: przegląda wydarzenia, kupuje i rezerwuje bilety
@@ -75,48 +77,56 @@ Organizator - użytkownik systemu posiadający uprawnienia do tworzenia i zarzą
 
 **2.3. Ograniczenia projektowe**
 
-**2.3.1. Ograniczenia organizacyjne:**
-**Ograniczenie:**
-Projekt musi zostać zrealizowany w krótkim czasie ok. 1-2 miesięcy. Nie ma możliwości implementacji wszystkich funkcji spotykanych w komercyjnych systemach biletowych.
-**Źródło:**
-Edukacyjny charakter projektu oraz ograniczone ilość członków zespołu.
-**Wpływ na architekturę:**
-* Konieczność znacznego zmniejszenia funkcji – rezygnacja z bardziej skomplikowanych opcji
-* Konieczność wyboru sprawdzonych technologii zamiast eksperymentowania z nowymi rozwiązaniami
-* Wyklucza zaawansowane funkcje optymalizacyjne
-<br>
+* **2.3.1. Ograniczenia organizacyjne**
+  
+  **Ograniczenie:**
+  Projekt musi zostać zrealizowany w krótkim czasie około 1-2 miesięcy. Nie ma możliwości implementacji wszystkich funkcji    spotykanych w komercyjnych systemach biletowych.
+  
+  **Źródło:**
+  Edukacyjny charakter projektu oraz ograniczona liczba członków zespołu.
+  
+  **Wpływ na architekturę:**
+  * Rezygnacja z bardziej skomplikowanych funkcjonalności
+  * Konieczność wyboru sprawdzonych technologii zamiast eksperymentowania z nowymi rozwiązaniami
+  * Wyklucza zaawansowane funkcje optymalizacyjne
 
-**2.3.2. Ograniczenie technologiczne:**
-**Ograniczenie:**
-System musi być zbudowany z wykorzystaniem Java + Spring Framework (backend), React (frontend) oraz PostgreSQL (baza danych).
-**Źródło:**
-Postanowienie grupy programistów oparte na umiejętnościach i wiedzy osób w zespole.
-**Wpływ na architekturę:**
-* Wymusza architekturę klient-serwer z REST API jako warstwą komunikacji
-* Wymusza wykorzystanie mechanizmów transakcyjnych ACID do obsługi rezerwacji biletów
-* Ogranicza możliwość wykorzystania innych frameworków (np. Django)
-<br>
+* **2.3.2. Ograniczenia technologiczne**
+ 
+  **Ograniczenie:**
+  System musi być zbudowany z wykorzystaniem następujących technologii: Java + Spring Boot (backend), React (frontend) oraz PostgreSQL (baza danych).
+  
+  **Źródło:**
+  Decyzja zespołu projektowego wynikająca z posiadanych umiejętności.
+  
+  **Wpływ na architekturę:**
+  * Wymusza architekturę klient-serwer z REST API jako warstwą komunikacji
+  * Wymusza wykorzystanie mechanizmów ORM
+  * Ogranicza możliwość wykorzystania innych frameworków
 
-**2.3.3. Ograniczenie biznesowe:**
-**Ograniczenie:**
-Całkowity budżet na hosting, infrastrukturę i zewnętrzne usługi wynosi 0 PLN miesięcznie.
-**Źródło:**
-Projekt akademicki bez finansowania zewnętrznego, brak sponsorów, brak możliwości ponoszenia kosztów przez studentów.
-**Wpływ na architekturę:**
-* Konieczność wykorzystania wyłącznie darmowych planów dostawców chmury
-* Ograniczenia w zakresie wydajności (mniejsze maszyny, wolniejsze bazy danych)
-* Wyklucza możliwość automatycznych backupów bazy danych
-<br>
+* **2.3.3. Ograniczenia biznesowe:**
 
-**2.3.4. Ograniczenie prawne:**
-**Ograniczenie:**
-System musi być zgodny z Rozporządzeniem o Ochronie Danych Osobowych (RODO), a wszystkie dane osobowe użytkowników (organizatorów i uczestników) muszą być fizycznie przechowywane na serwerach zlokalizowanych w granicach Europejskiego Obszaru Gospodarczego (EOG).
-**Źródło:**
-Prawo Unii Europejskiej.
-**Wpływ na architekturę:**
-* Drastycznie zawęża wybór dostawców usług chmurowych do tych, którzy posiadają centra danych w EOG
-* Wymusza implementację mechanizmów do obsługi praw użytkowników (prawo do bycia zapomnianym, prawo do eksportu danych), co musi być uwzględnione w projekcie bazy danych i API
-* Narzuca konieczność anonimizacji danych w środowiskach deweloperskich i testowych
+  **Ograniczenie:**
+  Całkowity budżet na hosting, infrastrukturę i zewnętrzne usługi wynosi 0 PLN miesięcznie.
+  
+  **Źródło:**
+  Projekt akademicki realizowany bez zewnętrznego finansowania.
+  
+  **Wpływ na architekturę:**
+  * Konieczność doboru infrastruktury opartej wyłącznie o darmowe plany usług
+  * Ograniczenia w zakresie wydajności
+
+* **2.3.4. Ograniczenie prawne:**
+  
+  **Ograniczenie:**
+  System musi być zgodny z Rozporządzeniem o Ochronie Danych Osobowych (RODO), a wszystkie dane osobowe użytkowników (organizatorów i uczestników) muszą być fizycznie przechowywane na serwerach zlokalizowanych w granicach Europejskiego Obszaru Gospodarczego (EOG).
+  
+  **Źródło:**
+  Prawo Unii Europejskiej.
+  
+  **Wpływ na architekturę:**
+  * Drastycznie zawęża wybór dostawców usług chmurowych do tych, którzy posiadają centra danych w EOG
+  * Wymusza implementację mechanizmów do obsługi praw użytkowników (prawo do bycia zapomnianym, prawo do eksportu danych), co musi być uwzględnione w projekcie bazy danych i API
+  * Narzuca konieczność anonimizacji danych w środowiskach deweloperskich i testowych
 
 **2.4. Założenia projektowe**
 
