@@ -138,3 +138,66 @@ Organizator - użytkownik systemu posiadający uprawnienia do tworzenia i zarzą
       *   **Kto:** Zespół projektowy.
 
 ### 3. Wymagania Funkcjonalne
+
+**WF-01: Zakup biletów z inteligentną walidacją miejsc**
+
+* **Opis:** Funkcjonalność umożliwia wybór miejsc na mapie. System weryfikuje wybór pod kątem powstawania pojedynczych luk, blokując go, gdy w pobliżu (w tym samym lub sąsiednich rzędach) istnieją alternatywne miejsca pozwalające uniknąć luki.
+  
+* **Historyjka użytkownika:**
+  * Jako klient,
+  * chcę wybrać konkretne miejsca obok siebie na mapie sali
+  * abym miał gwarancję, że będę siedzieć razem ze znajomymi
+
+* **Cel biznesowy:** Zwiększenie zysku organizatora poprzez zmniejszenie liczby niesprzedanych pojedynczych miejsc.
+  
+* **Warunki wstępne:** Użytkownik widzi mapę sektora.
+
+* **Warunki końcowe:** Miejsca zarezerwowane, brak zbędnych luk w rzędach (chyba, że było to nieuniknione).
+
+* **Kryteria akceptacji:**
+  * **WF-APLIK-01-A**: Optymalny wybór miejsc (Scenariusz główny)
+    * Opis: Użytkownik wybiera miejsca w sposób, który nie generuje luki.
+    * Kryteria akceptacji:
+      * Given: Widzę rząd z wolnymi miejscami 7, 8, 9, 10.
+      * When: Wybieram miejsca 7 i 8 (obok już zajętych).
+      * Then: System akceptuje wybór i przechodzi dalej.
+        
+  * **WF-APLIK-01-B**: Wybór miejsc tworzących lukę (Scenariusz alternatywny 1)
+    * Opis: Użytkownik robi lukę, ale w tym samym rzędzie są inne miejsca, które luki nie robią.
+    * Kryteria akceptacji:
+      * Given: Wybieram miejsca 8 i 9, zostawiając pustą lukę na miejscu nr 7.
+      * And: Algorytm wykrywa, że w tym samym rzędzie dostępna jest para 7 i 8.
+      * When: Klikam "Dalej".
+      * Then: System blokuje przejście.
+      * And: Wyświetla komunikat: "Ten wybór zostawia pojedyncze wolne miejsce. Dostępne są inne miejsca obok siebie." i podpowiada sugerowane miejsca.
+        
+  * **WF-APLIK-01-C**: Wybór miejsc tworzących lukę (Scenariusz alternatywny 2)
+    * Opis: Użytkownik robi lukę, ale w jego rzędzie nie ma alternatywych miejsc, są jednak w rzędzie wyżej lub niżej.
+    * Kryteria akceptacji:
+      * Given: Wybieram miejsca z luką w rzędzie 5.
+      * And: W rzędzie 5 brakuje innej możliwości wyboru miejsc obok siebie dla tej liczby osób.
+      * And: Algorytm wykrywa, że w rzędzie sąsiednim (4 lub 6) dostepne są wolne miejsca obok siebie nietworzące luki.
+      * When: Klikam "Dalej".
+      * Then: System blokuje przejście.
+      * And: Wyświetla komunikat: "Ten wybór zostawia pojedyncze wolne miejsce. Dostępne są inne miejsca obok siebie." i podpowiada sugerowane miejsca w innym rzędzie.
+
+  * **WF-APLIK-01-D**: Wybór miejsc tworzących lukę (Scenariusz alternatywny 3)
+    * Opis: Użytkownik robi lukę, a system po przeszukaniu rzędu obecnego oraz sąsiednich nie znajduje nic lepszego.
+    * Kryteria akceptacji:
+      * Given: Wybieram miejsca tworząc lukę.
+      * And: System sprawdza rząd obecny, wyższy i niższy i nie znajduje żadnych lepszych miejsc.
+      * When: Klikam "Dalej".
+      * Then: System zezwala na wybór (mimo luki), uznając, że klient nie ma innej opcji i przechodzi dalej.
+        
+  * **WF-APLIK-01-E**: Konflikt rezerwacji (Scenariusz wyjątkowy)
+      * Opis: Użytkownik wybiera miejsce, ale w tej samej chwili zajmuje inny klient
+      * Kryteria akceptacji:
+        * Given: Widzę wybrane miejsce jako wolne
+        * When: Klikam na to miejsce, jednak serwer przetworzył żądanie drugiego klienta ułamek sekundy wcześniej.
+        * Then: System blokuje moją rezerwację i wyświetla komunikat: "To miejsce jest niedostępne".
+    
+      
+  
+     
+
+
