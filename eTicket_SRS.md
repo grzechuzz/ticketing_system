@@ -273,3 +273,44 @@ Atrybuty jakościowe definiują jakość działania systemu eTicket. Ze względu
 | **Użyteczność** | Intuicyjność interfejsu pozwalająca na proste tworzenie wydarzeń przez organizatorów, jak i szybki zakup biletów przez klientów. | Łączy się to z głównym celem biznesowym. Jest na 5 miejscu, bo system najpierw musi działać (1-3) i być bezpieczny (4), zanim będzie przyjemny w obsłudze |
 | **Modyfikowalność** | Łatwość wprowadzania zmian w kodzie i strukturze bazy. | Projekt jest w fazie MVP, co oznacza, że kod będzie często zmieniany i możliwie rozwijany o nowe funkcje w przyszłości. |
 | **Skalowalność** | Możliwość obsługi rosnącej liczby użytkowników. | Ze względu na ograniczenie budżetowe w fazie MVP, skalowalność nie jest priorytetem. |
+
+**4.2. Mierzalna specyfikacja**
+
+Dla trzech najważniejszych atrybutów zdefiniowano scenariusze testowe.
+
+**Scenariusz 1: Integralność Danych**
+
+| Element | Opis |
+| :--- | :--- |
+| **Źródło bodźca** | Dwóch różnych użytkowników. |
+| **Bodziec** | Próba zakupu tego samego miejsca w dokładnie tym samym czasie. |
+| **Artefakt** | Baza danych. |
+| **Środowisko** | Normalne działanie systemu przy większym obciążeniu. |
+| **Reakcja** | System wykorzystuje mechanizm transakcji. Pierwsze żądanie kończy się sukcesem, drugie zostaje odrzucone. |
+| **Miara reakcji** | Występuje 0 przypadków podwójnej rezerwacji. |
+
+**Scenariusz 2: Dostępność**
+
+| Element | Opis |
+| :--- | :--- |
+| **Źródło bodźca** | Organizator wydarzenia. |
+| **Bodziec** | Uruchomienie sprzedaży biletów na popularne wydarzenie, co powoduje gwałtowny wzrost ruchu. |
+| **Artefakt** | Cały system. |
+| **Środowisko** | Szczytowe obciążenie (zdefiniowane gdy 1000 użytkowników jednocześnie próbuje kupić bilety). |
+| **Reakcja** | System pozostaje dostępny i responsywny, obsługuje wszystkie żądania bez błędów serwera. |
+| **Miara reakcji** | System utrzymuje dostępność na poziomie minimum 99% w czasie pierwszych 15 minut od startu sprzedaży, mierzoną jako stosunek udanych żądań HTTP do wszystkich żądań. |
+
+**Scenariusz 3: Wydajność**
+
+| Element | Opis |
+| :--- | :--- |
+| **Źródło bodźca** | Klient. |
+| **Bodziec** | Wybiera 2 miejsca na mapie sektora i klika "Dalej", uruchamiając algorytm walidacji miejsc. |
+| **Artefakt** | Algorytm walidacji w module rezerwacji + baza danych. |
+| **Środowisko** | Szczytowe obciążenie (zdefiniowane gdy 100 użytkowników jednocześnie próbuje wybrać miejsca w tym samym sektorze). |
+| **Reakcja** | Algorytm zadziała poprawnie. |
+| **Miara reakcji** | Czas wykonania algorytmu wynosi maksymalnie 500ms dla 95% przypadków, mierzony od momentu wysłania żądania HTTP do otrzymania odpowiedzi z wynikiem walidacji. |
+
+**4.3. Analiza kompromisów architektonicznych**
+
+Realizacja powyższych celów wymaga podjęcia trudnych decyzji projektowych.
