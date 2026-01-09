@@ -179,7 +179,8 @@ Organizator - użytkownik systemu posiadający uprawnienia do tworzenia i zarzą
       * And: Algorytm wykrywa, że w rzędzie sąsiednim (4 lub 6) dostepne są wolne miejsca obok siebie nietworzące luki.
       * When: Klikam "Dalej".
       * Then: System blokuje przejście.
-      * And: Wyświetla komunikat: "Ten wybór zostawia pojedyncze wolne miejsce. Dostępne są inne miejsca obok siebie." i podpowiada sugerowane miejsca w innym rzędzie.
+      * And: Wyświetla komunikat: "Ten wybór zostawia pojedyncze wolne miejsce. Dostępne są inne miejsca obok siebie."
+      * And: Podpowiada sugerowane miejsca w innym rzędzie.
 
   * **WF-APLIK-01-D**: Wybór miejsc tworzących lukę (Scenariusz alternatywny 3)
     * Opis: Użytkownik robi lukę, a system po przeszukaniu rzędu obecnego oraz sąsiednich nie znajduje nic lepszego.
@@ -187,17 +188,64 @@ Organizator - użytkownik systemu posiadający uprawnienia do tworzenia i zarzą
       * Given: Wybieram miejsca tworząc lukę.
       * And: System sprawdza rząd obecny, wyższy i niższy i nie znajduje żadnych lepszych miejsc.
       * When: Klikam "Dalej".
-      * Then: System zezwala na wybór (mimo luki), uznając, że klient nie ma innej opcji i przechodzi dalej.
+      * Then: System zezwala na wybór (mimo luki), uznając, że klient nie ma innej opcji.
+      * And: Pozwala na przejście dalej.
         
   * **WF-APLIK-01-E**: Konflikt rezerwacji (Scenariusz wyjątkowy)
       * Opis: Użytkownik wybiera miejsce, ale w tej samej chwili zajmuje inny klient
       * Kryteria akceptacji:
         * Given: Widzę wybrane miejsce jako wolne
         * When: Klikam na to miejsce, jednak serwer przetworzył żądanie drugiego klienta ułamek sekundy wcześniej.
-        * Then: System blokuje moją rezerwację i wyświetla komunikat: "To miejsce jest niedostępne".
-    
-      
+        * Then: System blokuje moją rezerwację.
+        * And: Wyświetla komunikat "To miejsce jest niedostępne".
+
+**WF-02: Tworzenie i publikacja wydarzenia**
+
+* **Opis:** Umożliwia organizatorom szybkie i łatwe utworzenie wydarzenia poprzez wypełnienie formularza podstawowymi danymi.
   
+* **Historyjka użytkownika:**
+  * Jako organizator,
+  * chcę przejść przez formularz z jasnymi instrukcjami
+  * abym mógł samodzielnie opublikować wydarzenie bez konieczności dodatkowych szkoleń i kontaktu z pomocą techniczną.
+
+* **Cel biznesowy:** Łatwość wdrożenia. System ma być na tyle intuicyjny, aby organizatorzy mogli z niego korzystać bez potrzeby szkoleń czy kontaktu z pomocą techniczną.
+  
+* **Warunki wstępne:** Użytkownik jest zalogowany w systemie i posiada rolę Organizatora.
+
+* **Warunki końcowe:** Wydarzenie zostaje poprawnie skonfigurowane, zapisane w bazie i upublicznione dla klientów.
+
+* **Kryteria akceptacji:**
+  * **WF-APLIK-02-A**: Wyświetlenie formularza tworzenia (Scenariusz główny 1)
+    * Opis: System prezentuje organizatorowi formularz.
+    * Kryteria akceptacji:
+      * Given: Jestem zalogowany jako organizator.
+      * When: Wybieram opcję "Utwórz wydarzenie".
+      * Then: System wyświetla czytelny formularz, do którego można wpisać podstawowe dane dotyczące wydarzenia (opis, data, godzina, lokalizacja, cenę biletów).
+        
+  * **WF-APLIK-02-B**: Konfiguracja sektorów (Scenariusz główny 2)
+    * Opis: Organizator dodaje sektory z wybranej areny i definiuje dla nich dostępne typy biletów oraz ich ceny.
+    * Kryteria akceptacji:
+      * Given: Wypełniono podstawowe dane wydarzenia.
+      * When: Dodaje potrzebne sektory oraz dodaję warianty cenowe (np. Normalny - 100 PLN, Ulgowy - 50 PLN).
+      * Then: System generuje mapę miejsc dla danej areny.
+      * And: Przypisuje ceny do miejsc.
+        
+  * **WF-APLIK-02-C**: Próba publikacji wydarzenia bez uzupełnienia wymaganych pól (Scenariusz alternatywny 1)
+    * Opis: System blokuje publikację wydarzenia z brakującymi danymi.
+    * Kryteria akceptacji:
+      * Given: Jestem w formularzu tworzenia wydarzenia.
+      * And: Nie wypełniłem wszystkich wymaganych pól
+      * When:  Próbuję przejść do kolejnego kroku.
+      * Then: System powinien wyświetlić komunikat przy niewypełnionych polach "To pole jest wymagane".
+      * And:  Uniemożlwia przejście do następnych kroków.
+
+  * **WF-APLIK-02-D**: Wysłanie formularza wydarzenia do akceptacji (Scenariusz główny 3)
+    * Opis: Organizator wypełnił cały formularz i przesyła go do akceptacji.
+    * Kryteria akceptacji:
+      * Given: Formularz wydarzenia i konfiguracja biletów zostały poprawnie uzupełnione.
+      * When: Klikam przycisk "Wyślij do akceptacji".
+      * Then: System zapisuje wydarzenie w bazie ze statusem "Oczekuje na weryfikację".
+      * And: Organizator otrzymuje komunikat potwierdzający wysłanie zgłoszenia.
      
 
 
