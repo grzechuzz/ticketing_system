@@ -258,3 +258,18 @@ Organizator - użytkownik systemu posiadający uprawnienia do tworzenia i zarzą
 | **WF-STAT** | **Statystyki dla organizatora** | 5 | 2 | 3 | 2 | **1.40** | **NIE** |
 | **WF-MAIL** | **Powiadomienia E-mail** | 8 | 5 | 5 | 8 | **1.00** | **NIE** |
 | **WF-PAY** | **Symulacja płatności** | 3 | 5 | 2 | 1 | **2.66** | **TAK** |
+
+### 4. Atrybuty jakościowe 
+
+Atrybuty jakościowe definiują jakość działania systemu eTicket. Ze względu na ograniczenia budżetowe (0 PLN) oraz specyfikę MVP, przyjęto następującą hierarchię ważności.
+
+**4.1. Priorytetyzacja atrybutów**
+| Atrybut Jakościowy | Opis | Uzasadnienie |
+| :--- | :--- | :--- |
+| **Integralność danych** | System musi gwarantować spójność danych o rezerwacjach, sprzedanych biletach. Nie może dojść do sytuacji, w której jedno miejsce zostanie sprzedane dwóm osobom. | Jest to najważniejszy atrybut. System jest bezużyteczny, jeśli sprzedaje bilety na to samo miejsce wielu osobom. |
+| **Dostępność** | System powinien być dostępny dla użytkowników w momentach o największym obciążeniu. | Awaria w trakcie startu sprzedaży jest niedopuszczalna, nawet jeśli nie wymagamy pełnej dostępności 24/7. |
+| **Wydajność** | Czas reakcji systemu na kluczowe operacje (np. algorytm walidacji miejsc) musi być akceptowalny dla człowieka. | Zbyt wolne działanie algorytmu walidacji miejsc zniechęci użytkowników i uniemożliwi realizację celu biznesowego (szybki zakup w mniej niż 90 sekund). |
+| **Bezpieczeństwo** | Ochrona danych osobowych organizatorów i klientów zgodnie z wymogami RODO. | System przetwarza dane osobowe, co stanowi ryzyko prawne i etyczne. |
+| **Użyteczność** | Intuicyjność interfejsu pozwalająca na proste tworzenie wydarzeń przez organizatorów, jak i szybki zakup biletów przez klientów. | Łączy się to z głównym celem biznesowym. Jest na 5 miejscu, bo system najpierw musi działać (1-3) i być bezpieczny (4), zanim będzie przyjemny w obsłudze |
+| **Modyfikowalność** | Łatwość wprowadzania zmian w kodzie i strukturze bazy. | Projekt jest w fazie MVP, co oznacza, że kod będzie często zmieniany i możliwie rozwijany o nowe funkcje w przyszłości. |
+| **Skalowalność** | Możliwość obsługi rosnącej liczby użytkowników. | Ze względu na ograniczenie budżetowe w fazie MVP, skalowalność nie jest priorytetem. |
