@@ -247,5 +247,14 @@ Organizator - użytkownik systemu posiadający uprawnienia do tworzenia i zarzą
       * Then: System zapisuje wydarzenie w bazie ze statusem "Oczekuje na weryfikację".
       * And: Organizator otrzymuje komunikat potwierdzający wysłanie zgłoszenia.
      
+**3.1. Priorytetyzacja wymagań**
 
-
+| ID Funkcji | Nazwa Funkcji | Korzyść | Kara | Koszt | Ryzyko | WYNIK | Decyzja MVP |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **WF-01** | **Zakup biletu (z walidacją)** | 21 | 21 | 13 | 13 | **1.61** | **TAK** |
+| **WF-02** | **Tworzenie wydarzenia** | 21 | 21 | 8 | 5 | **3.23** | **TAK** |
+| **WF-AUTH** | **Logowanie i Rejestracja** | 8 | 21 | 5 | 2 | **4.14** | **TAK** |
+| **WF-PDF** | **Generowanie biletu PDF** | 13 | 8 | 5 | 3 | **2.62** | **TAK** |
+| **WF-STAT** | **Statystyki dla organizatora** | 5 | 2 | 3 | 2 | **1.40** | **NIE** |
+| **WF-MAIL** | **Powiadomienia E-mail** | 8 | 5 | 5 | 8 | **1.00** | **NIE** |
+| **WF-PAY** | **Symulacja płatności** | 3 | 5 | 2 | 1 | **2.66** | **TAK** |
