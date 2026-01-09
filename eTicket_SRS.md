@@ -314,3 +314,28 @@ Dla trzech najważniejszych atrybutów zdefiniowano scenariusze testowe.
 **4.3. Analiza kompromisów architektonicznych**
 
 Realizacja powyższych celów wymaga podjęcia trudnych decyzji projektowych.
+
+**Analiza dla Scenariusza 1: Integralność Danych**
+* **Cel:** 100% spójności danych przy współbieżnych zakupach.
+* **Możliwe rozwiązanie architektoniczne:** Zastosowanie pesymistycznego blokowania(for update) na poziomie bazy danych dla rekordów miejsc.
+* **Kompromis:**
+    * **Pozytywny:** Zwiększamy **Integralność danych** - pewność, że nie sprzedamy tego samego biletu dwa razy.
+    * **Negatywny:** Pogarszamy **Wydajność**. Blokowanie rekordów kolejkuje zapytania. Przy dużym ruchu może to prowadzić do wolniejszego działania systemu dla użytkowników próbujących kupić bilety w tym samym sektorze, jednak bezpieczeństwo transakcji jest ważniejsze.
+
+**Analiza dla Scenariusza 2: Dostępność**
+* **Cel:** Zapewnienie dostępności systemu w krytycznym momencie sprzedaży - start sprzedaży.
+* **Możliwe rozwiązanie architektoniczne:** Hosting aplikacji na platformie z możliwością automatycznego skalowania (Railway.app)
+* **Kompromis:**
+    * **Pozytywny:** 
+        * Znacząco poprawiamy **dostępność** w krytycznych momentach.
+        * Zwiększamy satysfakcję użytkowników - mogą kupić bilety bez irytacji
+    * **Negatywny:** Zwiększamy  **koszt operacyjny** - jeśli darmowy plan nie wystarczy w szczycie, może być konieczna zmiana na płatny plan.
+
+**Analiza dla Scenariusza 3: Wydajność**
+* **Cel:** Osiągnięcie czasu odpowiedzi poniżej 500ms.
+* **Możliwe rozwiązanie architektoniczne:** Zastosowanie mechanizmu Spring Cache do przechowywania danych statycznych wydarzenia (opis, układ sali) w pamięci operacyjnej aplikacji.
+* **Kompromis:**
+    * **Pozytywny:** Znacząco poprawiamy **wydajność** dla powtarzalnych zapytań.
+    * **Negatywny:** 
+        * Pogarszamy **modyfikowalność**, ponieważ logika systemu staje się bardziej złożona
+        * Wprowadzamy ryzyko **niespójności danych**. Jeśli organizator zmieni cenę biletu, użytkownicy mogą przez pewien czas widzieć starą cenę z cache.
