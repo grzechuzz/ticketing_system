@@ -339,3 +339,40 @@ Realizacja powyższych celów wymaga podjęcia trudnych decyzji projektowych.
     * **Negatywny:** 
         * Pogarszamy **modyfikowalność**, ponieważ logika systemu staje się bardziej złożona
         * Wprowadzamy ryzyko **niespójności danych**. Jeśli organizator zmieni cenę biletu, użytkownicy mogą przez pewien czas widzieć starą cenę z cache.
+
+### 5. Odkrywanie i Analiza Wymagań
+
+**5.1. Mierzalna specyfikacja**
+
+Celem analizy jest porównanie systemu eTicket z najlepszymi praktykami rynkowymi w celu identyfikacji mocnych i słabych stron oraz znalezienia inspiracji do ulepszeń. 
+
+**5.1.1. Identyfikacja Konkurencji**
+* **Konkurencja bezpośrednia:**
+    * **Eventbrite** - jedna z najbardziej znanych platform, umożliwia samodzielne stworzenie wydarzenia.
+    * **Ticketmaster/eBilet** - systemy profesjonalne obsługujące duże obiekty z numerowanymi miejscami.
+* **Wzorce funkcjonalne:**
+    * **Systemy kinowe Cinema City** - Zamknięte systemy sprzedaży biletów z wyborem miejsc.
+
+**5.1.2. Zdefiniowanie Kryteriów Oceny:**
+
+| Kryterium | Kryterium oceny | Eventbrite | Ticketmaster/eBilet | Cinema City
+| :--- | :--- | :--- | :--- | :--- | 
+| **Łatwość tworzenia wydarzenia** | Czas potrzebny na utworzenie i opublikowanie wydarzenia + intuicyjność interfejsu| trwa 10 min | wymaga kontaktu z działem sprzedaży | Nie dotyczy |
+| **Wybór miejsc na mapie** | Obecność funkcji wizualizacji sali z możliwością wyboru konkretnych miejsc | Nie | Tak | Tak |
+| **Inteligentna walidacja miejsc** | System zapobiega powstawaniu pojedynczych wolnych miejsc | Nie | Tak | Tak |
+| **Intuicyjność procesu zakupu** | Prostota i zrozumiałość ścieżki zakupowej dla klienta | 4/5 | 4/5 | 5/5 |
+| **Czas zakupu biletu** | Średni czas od wejścia na stronę wydarzenia do potwierdzenia zakupu | ~120 sekund | ~180 sekund | ~60 sekund |
+| **Model cenowy** | Koszt dla organizatora - prowizje, opłaty stałe | Brak opłat za bezpłatne wydarzenia, na płatne prowizja 6.6% + 1,79 USD | Prowizja 10-15% | Nie dotyczy |
+| **Generowanie biletów PDF** | Automatyczne tworzenie biletów PDF z kodem QR/kodem kreskowym | Tak | Tak | Tak |
+| **Statystyki dla organizatora** | Dostęp do raportów sprzedaży i analiz| Tak | Tak | Nie dotyczy|
+| **Wsparcie techniczne** | Jakość i dostępność pomocy dla użytkowników| Email + czat | Dedykowany opiekun | Infolinia |
+
+**5.1.3. Synteza Wynikówy:**
+
+* **Co konkurencja robi dobrze oraz jej unikalne funkcje**
+  * **Cinema City:** Wyznacza czas trwania zakupu bletów - około 60s. Pokazuje, że wprowadzenie walidacji miejsc nie spowalnia użytkownika.
+  * **Eventbrite:** Oferuje świetny model samoobsługi. Dostęp do statystyk i automatyczne generowanie biletów PDF jest standardem rynkowym, którego oczekują organizatorzy.
+  * **Ticketmaster:** Profesjonalna wizualizacja mapy miejsc. Przy wyborze miejsc należy pozostawić co najmniej dwa sąsiadujące wolne miejsca.
+
+* **Słabe punkty konkurencji**
+  * Eventbrite w modelu samoobsługowym nie posiada algorytmu, któy zapobiega powstawaniu pojedynczych wolnych miejsc. Prowadzi to do strat finansowych organizatora. Natomiast większe systemy np. Ticketmaster są niedostępne dla małych organizatorów np. startupów – wymagają umów i długiego wdrażania.
