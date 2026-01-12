@@ -42,12 +42,20 @@ Dokument jest przeznaczony dla zespołu deweloperskiego, testerów, klientów or
 
   - Sprawna moderacja. Organizator oczekuje sprawnego procesu weryfikacji wydarzenia, aby uniknąć opóźnień w zaplanowanym harmonogramie sprzedaży.<br><br>**Kryterium akceptacji**: W ciągu pierwszych 12 miesięcy działania systemu 95% wydarzeń zgłoszonych przez organizatorów jest rozpatrywanych (zatwierdzanych lub odrzucanych z komentarzem) w czasie krótszym niż 24 godziny od momentu przesłania.
 
-**1.3. Definicje, Akronimy i Skróty:**
+**1.3. Definicje, Akronimy i Skróty**
+  * Luka - pojedyncze wolne miejsce w rzędzie pomiędzy miejscami zajętymi, trudne do sprzedaży
+  * Organizator - użytkownik systemu posiadający uprawnienia do tworzenia i zarządzania wydarzeniami
+  * Klient - użytkownik przeglądający ofertę i dokonujący zakupu biletów
+  * DTO - Data Transfer Object, obiekt służący do przesyłania danych między podsystemami w celu optymalizacji wydajności
 
-Organizator - użytkownik systemu posiadający uprawnienia do tworzenia i zarządzania wydarzeniami
 
-**1.4. Przegląd Dokumentu:**
+**1.4. Przegląd Dokumentu**
 
+  Pozostała część dokumentu została zorganizowana w następujący sposób:
+  * **Rozdział 2 (Opis ogólny)** przedstawia szerszy kontekst projektu, charakteryzuje użytkowników systemu oraz definiuje kluczowe ograniczenia projektowe (technologiczne, budżetowe i prawne).
+  * **Rozdział 3 (Wymagania Funkcjonalne)** zawiera szczegółowy opis funkcji systemu (zakup biletów, tworzenie wydarzeń) wraz z kryteriami akceptacji i priorytetami.
+  * **Rozdział 4 (Atrybuty jakościowe)** definiuje wymagania niefunkcjonalne, takie jak wydajność, dostępność i integralność danych, oraz przedstawia analizę kompromisów architektonicznych podjętych w celu ich spełnienia.
+  * **Rozdział 5 (Analiza rynku)** zawiera porównanie systemu eTicket z istniejącymi rozwiązaniami konkurencyjnymi (Eventbrite, Ticketmaster, Cinema City), wskazując na luki rynkowe, które projekt ma za zadanie wypełnić.
 
 ### 2. Opis ogólny
 
@@ -121,7 +129,7 @@ Organizator - użytkownik systemu posiadający uprawnienia do tworzenia i zarzą
 
 * **2.4.1. Założenie akceptacji walidacji miejsc**
   *   **Założenie:** Zakładamy, że klienci zaakceptują mechanizm inteligentnej alokacji i walidacji miejsc, który blokuje możliwość pozostawiania pojedynczego wolnego miejsca (wymuszając lub proponując wybór innych miejsc) i nie zniechęci ich to do finalizacji transakcji.
-  *   **Ryzyko:** Klienci moga odebrać tę blokadę jako błąd systemu lub irytujące ograniczenie ich swobody, co doprowadzi do porzucenia koszyka i spadku sprzedaży.
+  *   **Ryzyko:** Klienci mogą odebrać tę blokadę jako błąd systemu lub irytujące ograniczenie ich swobody, co doprowadzi do porzucenia koszyka i spadku sprzedaży.
   *   **Plan walidacji:**
       *   **Co:** Testy użyteczności na prototypie.
       *   **Jak:** Przeprowadzenie krótkich sesji z 10 użytkownikami, którzy otrzymują zadanie wybrania miejsca w sposób generujący "lukę". Obserwacja czy po otrzymaniu komunikatu blokady rozumieją go i korygują wybór czy rezygnują z zakupu.
@@ -130,7 +138,7 @@ Organizator - użytkownik systemu posiadający uprawnienia do tworzenia i zarzą
 
 * **2.4.2. Założenie dotyczące praw autorskich**
   *   **Założenie:** Zakładamy, że organizatorzy będą publikować wyłącznie materiały graficzne do których posiadają prawa autorskie, co zwalnia system z konieczności implementacji automatycznych mechanizmów weryfikacji własności intelektualnej. 
-  *   **Ryzyko:** Właściciele systemu mogą zostać pociagnięci do współodpowiedzialności prawnej.
+  *   **Ryzyko:** Właściciele systemu mogą zostać pociągnięci do współodpowiedzialności prawnej.
   *   **Plan walidacji:** 
       *   **Co:** Weryfikacja mechanizmów prawnych.
       *   **Jak:** Sprawdzenie czy proces tworzenia wydarzenia wymusza na organizatorze akceptację regulaminu.
@@ -172,11 +180,11 @@ Organizator - użytkownik systemu posiadający uprawnienia do tworzenia i zarzą
       * And: Wyświetla komunikat: "Ten wybór zostawia pojedyncze wolne miejsce. Dostępne są inne miejsca obok siebie." i podpowiada sugerowane miejsca.
         
   * **WF-APLIK-01-C**: Wybór miejsc tworzących lukę (Scenariusz alternatywny 2)
-    * Opis: Użytkownik robi lukę, ale w jego rzędzie nie ma alternatywych miejsc, są jednak w rzędzie wyżej lub niżej.
+    * Opis: Użytkownik robi lukę, ale w jego rzędzie nie ma alternatywnych miejsc, są jednak w rzędzie wyżej lub niżej.
     * Kryteria akceptacji:
       * Given: Wybieram miejsca z luką w rzędzie 5.
       * And: W rzędzie 5 brakuje innej możliwości wyboru miejsc obok siebie dla tej liczby osób.
-      * And: Algorytm wykrywa, że w rzędzie sąsiednim (4 lub 6) dostepne są wolne miejsca obok siebie nietworzące luki.
+      * And: Algorytm wykrywa, że w rzędzie sąsiednim (4 lub 6) dostępne są wolne miejsca obok siebie nietworzące luki.
       * When: Klikam "Dalej".
       * Then: System blokuje przejście.
       * And: Wyświetla komunikat: "Ten wybór zostawia pojedyncze wolne miejsce. Dostępne są inne miejsca obok siebie."
@@ -237,7 +245,7 @@ Organizator - użytkownik systemu posiadający uprawnienia do tworzenia i zarzą
       * And: Nie wypełniłem wszystkich wymaganych pól
       * When:  Próbuję przejść do kolejnego kroku.
       * Then: System powinien wyświetlić komunikat przy niewypełnionych polach "To pole jest wymagane".
-      * And:  Uniemożlwia przejście do następnych kroków.
+      * And:  Uniemożliwia przejście do następnych kroków.
 
   * **WF-APLIK-02-D**: Wysłanie formularza wydarzenia do akceptacji (Scenariusz główny 3)
     * Opis: Organizator wypełnił cały formularz i przesyła go do akceptacji.
@@ -296,7 +304,7 @@ Dla trzech najważniejszych atrybutów zdefiniowano scenariusze testowe.
 | **Źródło bodźca** | Organizator wydarzenia. |
 | **Bodziec** | Uruchomienie sprzedaży biletów na popularne wydarzenie, co powoduje gwałtowny wzrost ruchu. |
 | **Artefakt** | Cały system. |
-| **Środowisko** | Szczytowe obciążenie (zdefiniowane gdy 1000 użytkowników jednocześnie próbuje kupić bilety). |
+| **Środowisko** | Szczytowe obciążenie (zdefiniowane gdy 100 użytkowników jednocześnie próbuje kupić bilety). |
 | **Reakcja** | System pozostaje dostępny i responsywny, obsługuje wszystkie żądania bez błędów serwera. |
 | **Miara reakcji** | System utrzymuje dostępność na poziomie minimum 99% w czasie pierwszych 15 minut od startu sprzedaży, mierzoną jako stosunek udanych żądań HTTP do wszystkich żądań. |
 
@@ -319,60 +327,57 @@ Realizacja powyższych celów wymaga podjęcia trudnych decyzji projektowych.
 * **Cel:** 100% spójności danych przy współbieżnych zakupach.
 * **Możliwe rozwiązanie architektoniczne:** Zastosowanie pesymistycznego blokowania(for update) na poziomie bazy danych dla rekordów miejsc.
 * **Kompromis:**
-    * **Pozytywny:** Zwiększamy **Integralność danych** - pewność, że nie sprzedamy tego samego biletu dwa razy.
-    * **Negatywny:** Pogarszamy **Wydajność**. Blokowanie rekordów kolejkuje zapytania. Przy dużym ruchu może to prowadzić do wolniejszego działania systemu dla użytkowników próbujących kupić bilety w tym samym sektorze, jednak bezpieczeństwo transakcji jest ważniejsze.
+    * **Pozytywny:** Zwiększamy **integralność danych** - pewność, że nie sprzedamy tego samego biletu dwa razy.
+    * **Negatywny:** Pogarszamy **wydajność**. Blokowanie rekordów kolejkuje zapytania. Przy dużym ruchu może to prowadzić do wolniejszego działania systemu dla użytkowników próbujących kupić bilety w tym samym sektorze, jednak bezpieczeństwo transakcji jest ważniejsze.
 
 **Analiza dla Scenariusza 2: Dostępność**
-* **Cel:** Zapewnienie dostępności systemu w krytycznym momencie sprzedaży - start sprzedaży.
-* **Możliwe rozwiązanie architektoniczne:** Hosting aplikacji na platformie z możliwością automatycznego skalowania (Railway.app)
+* **Cel:** Zapewnienie dostępności systemu w krytycznym momencie - start sprzedaży.
+* **Możliwe rozwiązanie architektoniczne:** Umieszczenie strony internetowej (React) i serwera (Spring Boot) na dwóch osobnych, niezależnych hostingach
 * **Kompromis:**
-    * **Pozytywny:** 
-        * Znacząco poprawiamy **dostępność** w krytycznych momentach.
-        * Zwiększamy satysfakcję użytkowników - mogą kupić bilety bez irytacji
-    * **Negatywny:** Zwiększamy  **koszt operacyjny** - jeśli darmowy plan nie wystarczy w szczycie, może być konieczna zmiana na płatny plan.
+    * **Pozytywny:** Zyskujemy ochronę zasobów serwera. W momencie, gdy użytkownicy masowo odświeżają stronę, cały ten ruch obsługuje hosting frontendowy. Zwiększamy też satysfakcję użytkowników, gdyż mogą kupić bilety bez irytacji.
+    * **Negatywny:** Akceptujemy ryzyko niespójności interfejsu. Jeśli backend ulegnie awarii, strona internetowa nadal będzie działać, ale każda próba zakupu skończy się błędem.
 
 **Analiza dla Scenariusza 3: Wydajność**
 * **Cel:** Osiągnięcie czasu odpowiedzi poniżej 500ms.
-* **Możliwe rozwiązanie architektoniczne:** Zastosowanie mechanizmu Spring Cache do przechowywania danych statycznych wydarzenia (opis, układ sali) w pamięci operacyjnej aplikacji.
+* **Możliwe rozwiązanie architektoniczne:** Zastosowanie lekkich obiektów DTO do pobierania stanu sektorów zamiast operowania na pełnych encjach bazodanowych.
 * **Kompromis:**
-    * **Pozytywny:** Znacząco poprawiamy **wydajność** dla powtarzalnych zapytań.
-    * **Negatywny:** 
-        * Pogarszamy **modyfikowalność**, ponieważ logika systemu staje się bardziej złożona
-        * Wprowadzamy ryzyko **niespójności danych**. Jeśli organizator zmieni cenę biletu, użytkownicy mogą przez pewien czas widzieć starą cenę z cache.
+    * **Pozytywny:** Znacząco poprawiamy **wydajność**. Przesyłamy z bazy tylko to co nam potrzebne, pomijając zbędne szczegóły, co odciąża sieć i RAM.
+    * **Negatywny:** Zwiększamy nakład pracy programistycznej. Musimy napisać dodatkowe klasy i interfejsy mapujące.
+
 
 ### 5. Odkrywanie i Analiza Wymagań
 
-**5.1. Mierzalna specyfikacja**
+**5.1. Analiza porównawcza**
 
 Celem analizy jest porównanie systemu eTicket z najlepszymi praktykami rynkowymi w celu identyfikacji mocnych i słabych stron oraz znalezienia inspiracji do ulepszeń. 
 
-**5.1.1. Identyfikacja Konkurencji**
-* **Konkurencja bezpośrednia:**
-    * **Eventbrite** - jedna z najbardziej znanych platform, umożliwia samodzielne stworzenie wydarzenia.
-    * **Ticketmaster/eBilet** - systemy profesjonalne obsługujące duże obiekty z numerowanymi miejscami.
-* **Wzorce funkcjonalne:**
-    * **Systemy kinowe Cinema City** - Zamknięte systemy sprzedaży biletów z wyborem miejsc.
+  * **5.1.1. Identyfikacja konkurencji**
+    * **Konkurencja bezpośrednia:**
+        * **Eventbrite** - jedna z najbardziej znanych platform, umożliwia samodzielne stworzenie wydarzenia.
+        * **Ticketmaster/eBilet** - systemy profesjonalne obsługujące duże obiekty z numerowanymi miejscami.
+    * **Wzorce funkcjonalne:**
+        * **Systemy kinowe Cinema City** - zamknięte systemy sprzedaży biletów z wyborem miejsc.
 
-**5.1.2. Zdefiniowanie Kryteriów Oceny:**
+  * **5.1.2. Zdefiniowanie kryteriów oceny:**
+  
+    | Kryterium | Kryterium oceny | Eventbrite | Ticketmaster/eBilet | Cinema City
+    | :--- | :--- | :--- | :--- | :--- | 
+    | **Łatwość tworzenia wydarzenia** | Czas potrzebny na utworzenie i opublikowanie wydarzenia + intuicyjność interfejsu| trwa 10 min | wymaga kontaktu z działem sprzedaży | Nie dotyczy |
+    | **Wybór miejsc na mapie** | Obecność funkcji wizualizacji sali z możliwością wyboru konkretnych miejsc | Nie | Tak | Tak |
+    | **Inteligentna walidacja miejsc** | System zapobiega powstawaniu pojedynczych wolnych miejsc | Nie | Tak | Tak |
+    | **Intuicyjność procesu zakupu** | Prostota i zrozumiałość ścieżki zakupowej dla klienta | 4/5 | 4/5 | 5/5 |
+    | **Czas zakupu biletu** | Średni czas od wejścia na stronę wydarzenia do potwierdzenia zakupu | ~120 sekund | ~180 sekund | ~60 sekund |
+    | **Model cenowy** | Koszt dla organizatora - prowizje, opłaty stałe | Brak opłat za bezpłatne wydarzenia, na płatne prowizja 6.6% + 1,79 USD | Prowizja 10-15% | Nie dotyczy |
+    | **Generowanie biletów PDF** | Automatyczne tworzenie biletów PDF z kodem QR/kodem kreskowym | Tak | Tak | Tak |
+    | **Statystyki dla organizatora** | Dostęp do raportów sprzedaży i analiz| Tak | Tak | Nie dotyczy|
+    | **Wsparcie techniczne** | Jakość i dostępność pomocy dla użytkowników| Email + czat | Dedykowany opiekun | Infolinia |
 
-| Kryterium | Kryterium oceny | Eventbrite | Ticketmaster/eBilet | Cinema City
-| :--- | :--- | :--- | :--- | :--- | 
-| **Łatwość tworzenia wydarzenia** | Czas potrzebny na utworzenie i opublikowanie wydarzenia + intuicyjność interfejsu| trwa 10 min | wymaga kontaktu z działem sprzedaży | Nie dotyczy |
-| **Wybór miejsc na mapie** | Obecność funkcji wizualizacji sali z możliwością wyboru konkretnych miejsc | Nie | Tak | Tak |
-| **Inteligentna walidacja miejsc** | System zapobiega powstawaniu pojedynczych wolnych miejsc | Nie | Tak | Tak |
-| **Intuicyjność procesu zakupu** | Prostota i zrozumiałość ścieżki zakupowej dla klienta | 4/5 | 4/5 | 5/5 |
-| **Czas zakupu biletu** | Średni czas od wejścia na stronę wydarzenia do potwierdzenia zakupu | ~120 sekund | ~180 sekund | ~60 sekund |
-| **Model cenowy** | Koszt dla organizatora - prowizje, opłaty stałe | Brak opłat za bezpłatne wydarzenia, na płatne prowizja 6.6% + 1,79 USD | Prowizja 10-15% | Nie dotyczy |
-| **Generowanie biletów PDF** | Automatyczne tworzenie biletów PDF z kodem QR/kodem kreskowym | Tak | Tak | Tak |
-| **Statystyki dla organizatora** | Dostęp do raportów sprzedaży i analiz| Tak | Tak | Nie dotyczy|
-| **Wsparcie techniczne** | Jakość i dostępność pomocy dla użytkowników| Email + czat | Dedykowany opiekun | Infolinia |
-
-**5.1.3. Synteza Wynikówy:**
-
-* **Co konkurencja robi dobrze oraz jej unikalne funkcje**
-  * **Cinema City:** Wyznacza czas trwania zakupu bletów - około 60s. Pokazuje, że wprowadzenie walidacji miejsc nie spowalnia użytkownika.
-  * **Eventbrite:** Oferuje świetny model samoobsługi. Dostęp do statystyk i automatyczne generowanie biletów PDF jest standardem rynkowym, którego oczekują organizatorzy.
-  * **Ticketmaster:** Profesjonalna wizualizacja mapy miejsc. Przy wyborze miejsc należy pozostawić co najmniej dwa sąsiadujące wolne miejsca.
-
-* **Słabe punkty konkurencji**
-  * Eventbrite w modelu samoobsługowym nie posiada algorytmu, któy zapobiega powstawaniu pojedynczych wolnych miejsc. Prowadzi to do strat finansowych organizatora. Natomiast większe systemy np. Ticketmaster są niedostępne dla małych organizatorów np. startupów – wymagają umów i długiego wdrażania.
+  * **5.1.3. Synteza wyników:**
+  
+    * **Co konkurencja robi dobrze oraz jej unikalne funkcje**
+      * **Cinema City:** Udowadnia, że wprowadzenie walidacji miejsc nie spowalnia znacznie zakupu użytkownika.
+      * **Eventbrite:** Oferuje świetny model samoobsługi. Dostęp do statystyk i automatyczne generowanie biletów PDF jest standardem rynkowym, którego oczekują organizatorzy.
+      * **Ticketmaster:** Profesjonalna wizualizacja mapy miejsc. Przy wyborze miejsc należy pozostawić co najmniej dwa sąsiadujące wolne miejsca.
+    
+    * **Słabe punkty konkurencji**
+      * Eventbrite w modelu samoobsługowym nie posiada algorytmu, który zapobiega powstawaniu pojedynczych wolnych miejsc. Prowadzi to do strat finansowych organizatora. Natomiast większe systemy np. Ticketmaster są niedostępne dla małych organizatorów np. startupów – wymagają umów i długiego wdrażania.
