@@ -37,9 +37,6 @@ public class User {
     @Column(name="phone_number", unique=true, length=20)
     private String phoneNumber;
 
-    @Column(name="birth_date")
-    private LocalDate birthDate;
-
     @Builder.Default
     @Column(name="is_active", nullable=false)
     private boolean isActive = true;
