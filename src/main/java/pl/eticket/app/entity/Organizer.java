@@ -62,6 +62,10 @@ public class Organizer {
     )
     private Set<User> users = new HashSet<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "organizer", fetch = FetchType.LAZY)
+    private Set<Event> events = new HashSet<>();
+
     @PrePersist
     protected void onCreate() {
         createdAt = Instant.now();
