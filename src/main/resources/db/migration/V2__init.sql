@@ -1,6 +1,6 @@
 CREATE TABLE addresses (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    country_code CHAR(2) NOT NULL,
+    country_code VARCHAR(2) NOT NULL,
     city VARCHAR(100) NOT NULL,
     postal_code VARCHAR(12) NOT NULL,
     street VARCHAR(255) NOT NULL,
