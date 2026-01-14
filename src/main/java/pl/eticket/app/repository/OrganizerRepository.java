@@ -2,12 +2,10 @@ package pl.eticket.app.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 import pl.eticket.app.entity.Organizer;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface OrganizerRepository extends JpaRepository<Organizer, Long> {
     Optional<Organizer> findByEmail(String email);
     List<Organizer> findByIsActiveTrue();

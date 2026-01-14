@@ -3,7 +3,8 @@ package pl.eticket.app.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.Instant;
-import java.time.LocalDate;
+import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 @Table(name="users")
@@ -47,6 +48,10 @@ public class User {
 
     @Column(name="updated_at", nullable=false)
     private Instant updatedAt = Instant.now();
+
+    @Builder.Default
+    @ManyToMany(mappedBy="users", fetch=FetchType.LAZY)
+    private Set<Organizer> organizers = new HashSet<>();
 
     @PrePersist
     protected void onCreate() {
