@@ -63,13 +63,11 @@ public class RefreshToken {
         this.revokedAt = Instant.now();
     }
 
-    public static RefreshToken create(User user, String tokenHash, long expirationMs, String ipAddress, String userAgent) {
+    public static RefreshToken create(User user, String tokenHash, long expirationMs) {
         RefreshToken rt = new RefreshToken();
         rt.user = user;
         rt.tokenHash = tokenHash;
         rt.expiresAt = Instant.now().plusMillis(expirationMs);
-        rt.ipAddress = ipAddress;
-        rt.userAgent = userAgent;
         return rt;
     }
 }
