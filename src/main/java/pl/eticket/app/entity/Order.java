@@ -11,9 +11,10 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 @Getter @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
+
+    private static final int DEFAULT_RESERVATION_MINUTES = 20;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,46 +29,76 @@ public class Order {
     private Event event;
 
     @Column(name = "total_price_net", nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalPriceNet;
+    private BigDecimal totalPriceNet = BigDecimal.ZERO;
 
     @Column(name = "total_price_gross", nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalPriceGross;
+    private BigDecimal totalPriceGross = BigDecimal.ZERO;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private OrderStatus status;
+    @Column(nullable = false, length = 20)
+    private OrderStatus status = OrderStatus.PENDING;
 
     @Column(name = "reserved_until", nullable = false)
     private Instant reservedUntil;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Instant createdAt;
+    private Instant createdAt = Instant.now();
 
     @Column(name = "updated_at", nullable = false)
-    private Instant updatedAt;
+    private Instant updatedAt = Instant.now();
 
     @Column(name = "completed_at")
     private Instant completedAt;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> orderItems = new ArrayList<>();
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<OrderItem> items = new ArrayList<>();
+
+    public static Order create(User user, Event event) {
+        Order order = new Order();
+        order.user = user;
+        order.event = event;
+        order.status = OrderStatus.PENDING;
+        order.totalPriceNet = BigDecimal.ZERO;
+        order.totalPriceGross = BigDecimal.ZERO;
+        order.reservedUntil = Instant.now().plus(DEFAULT_RESERVATION_MINUTES, ChronoUnit.MINUTES);
+        return order;
+    }
 
     @PrePersist
     protected void onCreate() {
         createdAt = Instant.now();
         updatedAt = Instant.now();
         if (reservedUntil == null) {
-            reservedUntil = Instant.now().plus(20, ChronoUnit.MINUTES);
+            reservedUntil = Instant.now().plus(DEFAULT_RESERVATION_MINUTES, ChronoUnit.MINUTES);
         }
-        if (status == null) {
-            status = OrderStatus.PENDING;
-        }
-        if (totalPriceNet == null) totalPriceNet = BigDecimal.ZERO;
-        if (totalPriceGross == null) totalPriceGross = BigDecimal.ZERO;
     }
 
     @PreUpdate
     protected void onUpdate() {
         updatedAt = Instant.now();
+    }
+
+    public boolean isExpired() {
+        return Instant.now().isAfter(reservedUntil) &&
+                (status == OrderStatus.PENDING || status == OrderStatus.AWAITING_PAYMENT);
+    }
+
+    public boolean canCheckout() {
+        return status == OrderStatus.PENDING && !items.isEmpty() && !isExpired();
+    }
+
+    public void addItem(OrderItem item) {
+        items.add(item);
+        item.setOrder(this);
+        recalculateTotals();
+    }
+
+    public void recalculateTotals() {
+        totalPriceNet = items.stream()
+                .map(i -> i.getUnitPriceNet().multiply(BigDecimal.valueOf(i.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        totalPriceGross = items.stream()
+                .map(i -> i.getUnitPriceGross().multiply(BigDecimal.valueOf(i.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
