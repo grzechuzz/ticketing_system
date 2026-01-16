@@ -7,4 +7,4 @@ import java.util.Optional;
 
 public interface TicketHolderRepository extends JpaRepository<TicketHolder, Long> {
     Optional<TicketHolder> findByTicketId(Long ticketId);
-}g
+}
