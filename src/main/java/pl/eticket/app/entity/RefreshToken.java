@@ -11,7 +11,6 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class RefreshToken {
 
     @Id
@@ -62,5 +61,13 @@ public class RefreshToken {
 
     public void revoke() {
         this.revokedAt = Instant.now();
+    }
+
+    public static RefreshToken create(User user, String tokenHash, long expirationMs) {
+        RefreshToken rt = new RefreshToken();
+        rt.user = user;
+        rt.tokenHash = tokenHash;
+        rt.expiresAt = Instant.now().plusMillis(expirationMs);
+        return rt;
     }
 }

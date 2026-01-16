@@ -10,9 +10,7 @@ import java.util.HashSet;
 @Table(name="users")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
     @Id
@@ -38,26 +36,34 @@ public class User {
     @Column(name="phone_number", unique=true, length=20)
     private String phoneNumber;
 
-    @Builder.Default
     @Column(name="is_active", nullable=false)
     private boolean isActive = true;
 
-    @Builder.Default
     @Column(name="created_at", nullable=false, updatable=false)
     private Instant createdAt = Instant.now();
 
     @Column(name="updated_at", nullable=false)
     private Instant updatedAt = Instant.now();
 
-    @Builder.Default
     @ManyToMany(mappedBy="users", fetch=FetchType.LAZY)
     private Set<Organizer> organizers = new HashSet<>();
 
+    public static User create(String email, String passwordHash, String firstName,
+                              String lastName, String phoneNumber, Role role) {
+        User user = new User();
+        user.email = email;
+        user.passwordHash = passwordHash;
+        user.firstName = firstName;
+        user.lastName = lastName;
+        user.phoneNumber = phoneNumber;
+        user.role = role;
+        user.isActive = true;
+        return user;
+    }
+
     @PrePersist
     protected void onCreate() {
-        if (createdAt == null) {
-            createdAt = Instant.now();
-        }
+        createdAt = Instant.now();
         updatedAt = Instant.now();
     }
 
