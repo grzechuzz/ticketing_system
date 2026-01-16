@@ -9,8 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, UUID> {
-    @Query("SELECT rt FROM RefreshToken rt WHERE rt.tokenHash = :hash AND rt.revokedAt IS NULL AND rt.expiresAt > :now")
-    Optional<RefreshToken> findValidByTokenHash(String hash, Instant now);
+    Optional<RefreshToken> findByTokenHash(String tokenHash);
 
     @Modifying
     @Query("UPDATE RefreshToken rt SET rt.revokedAt = :now WHERE rt.user.id = :userId AND rt.revokedAt IS NULL")
