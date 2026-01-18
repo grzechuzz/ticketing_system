@@ -5,10 +5,9 @@ import lombok.*;
 
 @Entity
 @Table(name = "seats", uniqueConstraints = @UniqueConstraint(columnNames = {"sector_id", "row_number", "seat_number"}))
-@Getter @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Seat {
 
@@ -28,10 +27,6 @@ public class Seat {
     private Integer seatNumber;
 
     public String getLabel() {
-        return "Rząd " + rowNumber + ", Miejsce " + seatNumber;
-    }
-
-    public String getShortLabel() {
-        return "R" + rowNumber + "/M" + seatNumber;
+        return "Row " + rowNumber + ", Seat " + seatNumber;
     }
 }
