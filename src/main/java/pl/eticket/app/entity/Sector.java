@@ -8,10 +8,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "sectors", uniqueConstraints = @UniqueConstraint(columnNames = {"venue_id", "name"}))
-@Getter @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Sector {
 
     @Id
@@ -25,7 +24,6 @@ public class Sector {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Builder.Default
     @Column(name = "is_standing", nullable = false)
     private Boolean isStanding = false;
 
@@ -38,23 +36,18 @@ public class Sector {
     @Column(name = "seats_per_row")
     private Integer seatsPerRow;
 
-    @Builder.Default
     @Column(name = "position_x", nullable = false)
     private Integer positionX = 0;
 
-    @Builder.Default
     @Column(name = "position_y", nullable = false)
     private Integer positionY = 0;
 
-    @Builder.Default
     @Column(nullable = false)
     private Integer width = 100;
 
-    @Builder.Default
     @Column(nullable = false)
     private Integer height = 100;
 
-    @Builder.Default
     @Column(length = 7)
     private String color = "#3B82F6";
 
@@ -64,7 +57,6 @@ public class Sector {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
-    @Builder.Default
     @OneToMany(mappedBy = "sector", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("rowNumber ASC, seatNumber ASC")
     private List<Seat> seats = new ArrayList<>();
@@ -85,15 +77,5 @@ public class Sector {
             return standingCapacity != null ? standingCapacity : 0;
         }
         return (rowsCount != null && seatsPerRow != null) ? rowsCount * seatsPerRow : seats.size();
-    }
-
-    public void generateSeats() {
-        if (isStanding || rowsCount == null || seatsPerRow == null) return;
-        seats.clear();
-        for (int row = 1; row <= rowsCount; row++) {
-            for (int seatNum = 1; seatNum <= seatsPerRow; seatNum++) {
-                seats.add(Seat.builder().sector(this).rowNumber(row).seatNumber(seatNum).build());
-            }
-        }
     }
 }
