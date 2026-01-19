@@ -14,8 +14,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findByUserId(Long userId);
 
-    @Query("SELECT o FROM Order o WHERE o.user.id = :userId AND o.event.id = :eventId AND o.status IN ('PENDING', 'AWAITING_PAYMENT')")
-    Optional<Order> findActiveCartByUserAndEvent(Long userId, Long eventId);
+    @Query("SELECT o FROM Order o WHERE o.user.id = :userId AND o.status IN ('PENDING', 'AWAITING_PAYMENT')")
+    Optional<Order> findActiveCartByUser(Long userId);
 
     @Query("SELECT o FROM Order o WHERE o.user.id = :userId AND o.status = 'COMPLETED' ORDER BY o.completedAt DESC")
     List<Order> findCompletedByUserId(Long userId);
