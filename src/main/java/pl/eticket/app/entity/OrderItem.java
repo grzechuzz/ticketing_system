@@ -21,6 +21,11 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
+    // denormalize on purpose to avoid overselling!!
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_id", nullable = false)
+    private Event event;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_sector_ticket_type_id", nullable = false)
     private EventSectorTicketType eventSectorTicketType;
@@ -86,7 +91,7 @@ public class OrderItem {
         return item;
     }
 
-    // Wspólna logika inicjalizacji
+    // Common logic for seating and GA tickets
     private static OrderItem createBase(Order order, EventSectorTicketType tt) {
         Event event = tt.getEventSector().getEvent();
         Venue venue = event.getVenue();
@@ -94,6 +99,7 @@ public class OrderItem {
 
         OrderItem item = new OrderItem();
         item.order = order;
+        item.event = event;
         item.eventSectorTicketType = tt;
         item.unitPriceNet = tt.getPriceNet();
         item.unitPriceGross = tt.getPriceGrossCalculated();

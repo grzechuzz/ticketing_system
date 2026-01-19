@@ -10,7 +10,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
 
@@ -23,10 +24,6 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id", nullable = false)
-    private Event event;
 
     @Column(name = "total_price_net", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalPriceNet = BigDecimal.ZERO;
@@ -53,10 +50,9 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderItem> items = new ArrayList<>();
 
-    public static Order create(User user, Event event) {
+    public static Order create(User user) {
         Order order = new Order();
         order.user = user;
-        order.event = event;
         order.status = OrderStatus.PENDING;
         order.totalPriceNet = BigDecimal.ZERO;
         order.totalPriceGross = BigDecimal.ZERO;
@@ -87,10 +83,15 @@ public class Order {
         return status == OrderStatus.PENDING && !items.isEmpty() && !isExpired();
     }
 
+    public void refreshReservation() {
+        reservedUntil = Instant.now().plus(DEFAULT_RESERVATION_MINUTES, ChronoUnit.MINUTES);
+    }
+
     public void addItem(OrderItem item) {
         items.add(item);
         item.setOrder(this);
         recalculateTotals();
+        refreshReservation();
     }
 
     public void recalculateTotals() {
