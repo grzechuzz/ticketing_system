@@ -4,7 +4,6 @@ CREATE TYPE ticket_status AS ENUM ('ACTIVE', 'USED', 'CANCELLED', 'EXPIRED');
 CREATE TABLE orders (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_id BIGINT NOT NULL REFERENCES users(id),
-    event_id BIGINT NOT NULL REFERENCES events(id),
     total_price_net NUMERIC(10,2) NOT NULL DEFAULT 0,
     total_price_gross NUMERIC(10,2) NOT NULL DEFAULT 0,
     status order_status NOT NULL DEFAULT 'PENDING',
@@ -15,7 +14,6 @@ CREATE TABLE orders (
 );
 
 CREATE INDEX idx_orders_user ON orders(user_id);
-CREATE INDEX idx_orders_event ON orders(event_id);
 CREATE INDEX idx_orders_status ON orders(status);
 CREATE UNIQUE INDEX uq_active_cart ON orders(user_id, event_id) WHERE status IN ('PENDING', 'AWAITING_PAYMENT');
 
