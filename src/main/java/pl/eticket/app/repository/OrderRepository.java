@@ -30,7 +30,4 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Modifying
     @Query("UPDATE Order o SET o.status = 'EXPIRED', o.updatedAt = CURRENT_TIMESTAMP WHERE o.status IN ('PENDING', 'AWAITING_PAYMENT') AND o.reservedUntil < :now")
     int expireOrders(Instant now);
-
-    @Query("SELECT COALESCE(SUM(oi.quantity), 0) FROM Order o JOIN o.items oi WHERE o.user.id = :userId AND o.event.id = :eventId AND o.status = 'COMPLETED'")
-    int countPurchasedTickets(Long userId, Long eventId);
 }
