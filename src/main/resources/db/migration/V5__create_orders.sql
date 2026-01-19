@@ -22,6 +22,7 @@ CREATE UNIQUE INDEX uq_active_cart ON orders(user_id, event_id) WHERE status IN 
 CREATE TABLE order_items (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     order_id BIGINT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    event_id BIGINT NOT NULL REFERENCES events(id),
     event_sector_ticket_type_id BIGINT NOT NULL REFERENCES event_sector_ticket_types(id),
     seat_id BIGINT REFERENCES seats(id),
     quantity INTEGER NOT NULL DEFAULT 1 CHECK (quantity > 0),
@@ -41,7 +42,9 @@ CREATE TABLE order_items (
 );
 
 CREATE INDEX idx_order_items_order ON order_items(order_id);
-CREATE UNIQUE INDEX uq_order_item_seat ON order_items(seat_id) WHERE seat_id IS NOT NULL;
+CREATE INDEX idx_order_items_event ON order_items(event_id);
+CREATE UNIQUE INDEX uq_order_item_event_seat ON order_items(event_id, seat_id) WHERE seat_id IS NOT NULL;
+
 
 CREATE TABLE tickets (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
