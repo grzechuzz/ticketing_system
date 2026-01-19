@@ -8,10 +8,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "event_sectors", uniqueConstraints = @UniqueConstraint(columnNames = {"event_id", "sector_id"}))
-@Getter @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EventSector {
 
     @Id
@@ -26,10 +25,10 @@ public class EventSector {
     @JoinColumn(name = "sector_id", nullable = false)
     private Sector sector;
 
-    @Column(name = "capacity_snapshot", nullable = false)
+    @Column(name = "capacity_snapshot")
     private Integer capacitySnapshot;
 
-    @Column(name = "available_capacity", nullable = false)
+    @Column(name = "available_capacity")
     private Integer availableCapacity;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -38,7 +37,6 @@ public class EventSector {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
-    @Builder.Default
     @OneToMany(mappedBy = "eventSector", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<EventSectorTicketType> ticketTypes = new ArrayList<>();
 
@@ -53,13 +51,9 @@ public class EventSector {
         updatedAt = Instant.now();
     }
 
-    public static EventSector fromSector(Event event, Sector sector) {
-        return EventSector.builder()
-                .event(event)
-                .sector(sector)
-                .capacitySnapshot(sector.getCapacity())
-                .availableCapacity(sector.getCapacity())
-                .build();
+    public void addTicketType(EventSectorTicketType tt) {
+        ticketTypes.add(tt);
+        tt.setEventSector(this);
     }
 
     public boolean isStanding() {
@@ -67,21 +61,27 @@ public class EventSector {
     }
 
     public boolean hasAvailableTickets(int qty) {
-        return availableCapacity >= qty;
+        if (!isStanding()) {
+            return true;
+        }
+        return availableCapacity != null && availableCapacity >= qty;
     }
 
     public boolean decrementCapacity(int qty) {
-        if (availableCapacity < qty) return false;
+        if (!isStanding() || availableCapacity == null) {
+            return true;
+        }
+        if (availableCapacity < qty) {
+            return false;
+        }
         availableCapacity -= qty;
         return true;
     }
 
     public void incrementCapacity(int qty) {
+        if (!isStanding() || availableCapacity == null || capacitySnapshot == null) {
+            return;
+        }
         availableCapacity = Math.min(availableCapacity + qty, capacitySnapshot);
-    }
-
-    public void addTicketType(EventSectorTicketType tt) {
-        ticketTypes.add(tt);
-        tt.setEventSector(this);
     }
 }
