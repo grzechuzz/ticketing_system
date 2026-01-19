@@ -15,7 +15,7 @@ CREATE TABLE orders (
 
 CREATE INDEX idx_orders_user ON orders(user_id);
 CREATE INDEX idx_orders_status ON orders(status);
-CREATE UNIQUE INDEX uq_active_cart ON orders(user_id, event_id) WHERE status IN ('PENDING', 'AWAITING_PAYMENT');
+CREATE UNIQUE INDEX uq_active_cart ON orders(user_id) WHERE status IN ('PENDING', 'AWAITING_PAYMENT');
 
 CREATE TABLE order_items (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
