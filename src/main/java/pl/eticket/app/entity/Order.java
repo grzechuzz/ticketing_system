@@ -96,10 +96,10 @@ public class Order {
 
     public void recalculateTotals() {
         totalPriceNet = items.stream()
-                .map(i -> i.getUnitPriceNet().multiply(BigDecimal.valueOf(i.getQuantity())))
+                .map(OrderItem::getTotalPriceNet)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         totalPriceGross = items.stream()
-                .map(i -> i.getUnitPriceGross().multiply(BigDecimal.valueOf(i.getQuantity())))
+                .map(OrderItem::getTotalPriceGross)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
