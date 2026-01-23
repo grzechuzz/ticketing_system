@@ -62,7 +62,6 @@ public class SATSolver {
     }
 
     public boolean isSatisfiableWithPartialAssignment(List<Clause> clauses, Map<Integer, Boolean> partial) {
-        Map<Integer, Boolean> result = new HashMap<>();
         return solve(clauses, new HashMap<>(partial));
     }
 }

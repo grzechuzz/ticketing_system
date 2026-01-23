@@ -2,6 +2,8 @@ package pl.eticket.app.validation;
 
 import org.springframework.stereotype.Component;
 import pl.eticket.app.entity.Seat;
+import pl.eticket.app.dto.order.SeatSuggestion;
+import pl.eticket.app.dto.order.SeatValidationResult;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -10,32 +12,13 @@ import java.util.stream.Collectors;
 public class SeatGapValidator {
     private final SATSolver solver = new SATSolver();
 
-    public record ValidationResult(
-            boolean valid,
-            String message,
-            List<SeatSuggestion> suggestions
-    ) {
-        public static ValidationResult ok() {
-            return new ValidationResult(true, "Selection is valid", Collections.emptyList());
-        }
-
-        public static ValidationResult invalid(String message, List<SeatSuggestion> suggestions) {
-            return new ValidationResult(false, message, suggestions);
-        }
-    }
-
-    public record SeatSuggestion(
-            int row,
-            List<Integer> seatNumbers
-    ) {}
-
-    public ValidationResult validate(
+    public SeatValidationResult validate(
             List<Seat> allSeatsInSector,
             Set<Long> occupiedSeatIds,
             Set<Long> selectedSeatIds
     ) {
         if (selectedSeatIds.isEmpty()) {
-            return ValidationResult.ok();
+            return SeatValidationResult.ok();
         }
 
         Map<String, Long> coordToId = new HashMap<>();
@@ -78,7 +61,7 @@ public class SeatGapValidator {
         boolean satisfiable = solver.isSatisfiableWithPartialAssignment(clauses, assignment);
 
         if (satisfiable) {
-            return ValidationResult.ok();
+            return SeatValidationResult.ok();
         }
 
         int numSelectedSeats = selectedSeatIds.size();
@@ -87,10 +70,10 @@ public class SeatGapValidator {
         );
 
         if (alternatives.isEmpty()) {
-            return ValidationResult.ok();
+            return SeatValidationResult.ok();
         }
 
-        return ValidationResult.invalid(
+        return SeatValidationResult.invalid(
                 "This selection creates a single-seat gap. Please choose adjacent seats.",
                 alternatives
         );
