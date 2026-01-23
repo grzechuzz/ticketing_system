@@ -124,4 +124,12 @@ public class OrderItem {
         tickets.add(ticket);
         ticket.setOrderItem(this);
     }
+
+    public BigDecimal getTotalPriceNet() {
+        return unitPriceNet.multiply(BigDecimal.valueOf(quantity));
+    }
+
+    public BigDecimal getTotalPriceGross() {
+        return unitPriceGross.multiply(BigDecimal.valueOf(quantity));
+    }
 }
