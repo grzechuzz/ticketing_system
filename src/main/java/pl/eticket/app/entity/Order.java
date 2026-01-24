@@ -2,6 +2,8 @@ package pl.eticket.app.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -33,6 +35,7 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
+    @JdbcTypeCode(org.hibernate.type.SqlTypes.NAMED_ENUM)
     private OrderStatus status = OrderStatus.PENDING;
 
     @Column(name = "reserved_until", nullable = false)
