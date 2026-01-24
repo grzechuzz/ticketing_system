@@ -6,10 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import pl.eticket.app.dto.order.AddSeatsRequest;
-import pl.eticket.app.dto.order.AddSeatsResponse;
-import pl.eticket.app.dto.order.AddStandingTicketsRequest;
-import pl.eticket.app.dto.order.OrderResponse;
+import pl.eticket.app.dto.order.*;
 import pl.eticket.app.security.SecurityUser;
 import pl.eticket.app.service.OrderService;
 
@@ -53,6 +50,16 @@ public class OrderController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/{id}/checkout")
+    public ResponseEntity<CheckoutResponse> checkout(
+            @AuthenticationPrincipal SecurityUser user,
+            @PathVariable Long id
+    ) {
+        CheckoutResponse response = orderService.checkout(user.id(), id);
+        return ResponseEntity.ok(response);
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderResponse> getOrder(
