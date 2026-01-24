@@ -140,7 +140,7 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public OrderResponse getOrder(Long userId, Long orderId) {
-        Order order = orderRepository.findByIdForUpdateWithItems(orderId)
+        Order order = orderRepository.findByIdWithItems(orderId)
                 .orElseThrow(() -> ApiException.notFound("Order not found"));
 
         if (!order.getUser().getId().equals(userId)) {
@@ -152,7 +152,7 @@ public class OrderService {
 
     @Transactional
     public CheckoutResponse checkout(Long userId, Long orderId) {
-        Order order = orderRepository.findByIdWithItems(orderId)
+        Order order = orderRepository.findByIdForUpdateWithItems(orderId)
                 .orElseThrow(() -> ApiException.notFound("Order not found"));
 
         if (!order.getUser().getId().equals(userId)) {
