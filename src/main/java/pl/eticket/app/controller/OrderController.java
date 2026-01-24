@@ -39,7 +39,7 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/current")
+    @PostMapping("/cart/current")
     public ResponseEntity<OrderResponse> getCurrentCart(
             @AuthenticationPrincipal SecurityUser user
     ) {
