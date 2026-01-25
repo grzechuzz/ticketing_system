@@ -2,6 +2,8 @@ package pl.eticket.app.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+
 import java.time.Instant;
 import java.util.UUID;
 
@@ -24,6 +26,7 @@ public class Ticket {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
+    @JdbcTypeCode(org.hibernate.type.SqlTypes.NAMED_ENUM)
     private TicketStatus status = TicketStatus.ACTIVE;
 
     @Column(name = "created_at", nullable = false, updatable = false)
