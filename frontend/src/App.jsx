@@ -1,25 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from './context/AuthContext';
+import { styles as s } from './styles/styles';
+
 import LoginRegister from './components/LoginRegister';
+import EventList from './components/EventList';
 
 export default function App() {
-    const { isAuthenticated, user, logout } = useAuth();
+    const { isAuthenticated, logout, user } = useAuth();
+    const [view, setView] = useState('list');
 
-    if (!isAuthenticated) {
-        return <LoginRegister />;
-    }
+    if (!isAuthenticated) return <LoginRegister />;
+
+    const loadEvent = async (id) => {
+        alert(`Wybrano wydarzenie ID: ${id}.`);
+    };
 
     return (
-        <div style={{ padding: '20px', fontFamily: 'Arial' }}>
-            <h1>Witaj, {user?.email}!</h1>
-            <p>Udało Ci się zalogować.</p>
-            <p>Reszta aplikacji (EventList, Cart itd.) pojawi się tutaj, gdy utworzysz odpowiednie pliki w folderze components.</p>
-            <button
-                onClick={logout}
-                style={{ padding: '10px 20px', background: 'red', color: 'white', border: 'none', cursor: 'pointer' }}
-            >
-                Wyloguj się
-            </button>
+        <div style={s.container}>
+            <div style={s.header}>
+                <div><strong>eTicket</strong> | Zalogowany: {user?.email}</div>
+                <div>
+                    <button style={s.navBtn} onClick={() => setView('list')}>Wydarzenia</button>
+
+                    <button style={s.navBtn} onClick={() => alert('bilety nanana')}>Bilety</button>
+                    <button style={s.navBtn} onClick={() => alert('koszyk nanana')}>Koszyk</button>
+
+                    <button style={{ ...s.navBtn, background: '#dc3545', color: '#fff' }} onClick={logout}>Wyloguj</button>
+                </div>
+            </div>
+
+            {view === 'list' && <EventList onSelect={loadEvent} />}
+
         </div>
     );
 }
