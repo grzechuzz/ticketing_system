@@ -2,6 +2,7 @@ package pl.eticket.app.validation;
 
 import java.util.*;
 
+// Based on https://github.com/Software-Archetypes/archetypes/tree/main/configurator/src/main/java/softwarearchetypes/sat
 public class SATSolver {
 
     public boolean solve(List<Clause> clauses, Map<Integer, Boolean> assignment) {
@@ -59,9 +60,5 @@ public class SATSolver {
             }
         }
         return null;
-    }
-
-    public boolean isSatisfiableWithPartialAssignment(List<Clause> clauses, Map<Integer, Boolean> partial) {
-        return solve(clauses, new HashMap<>(partial));
     }
 }

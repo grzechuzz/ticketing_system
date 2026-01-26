@@ -2,6 +2,7 @@ package pl.eticket.app.validation;
 
 import java.util.*;
 
+// Based on https://github.com/Software-Archetypes/archetypes/tree/main/configurator/src/main/java/softwarearchetypes/sat
 public class Clause {
 
     private final List<Integer> literals;

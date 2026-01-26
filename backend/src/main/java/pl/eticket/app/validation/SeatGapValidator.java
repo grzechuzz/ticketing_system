@@ -34,39 +34,44 @@ public class SeatGapValidator {
             maxCol = Math.max(maxCol, seat.getSeatNumber());
         }
 
-        Set<Integer> rowsToCheck = new HashSet<>();
+        Set<Integer> selectedRows = new HashSet<>();
         for (Long seatId : selectedSeatIds) {
             int[] coord = idToCoord.get(seatId);
             if (coord != null) {
-                int row = coord[0];
-                rowsToCheck.add(row);
-                if (row > 1) rowsToCheck.add(row - 1);
-                if (row < maxRow) rowsToCheck.add(row + 1);
+                selectedRows.add(coord[0]);
             }
         }
 
         Set<Long> occupiedAfterSelection = new HashSet<>(occupiedSeatIds);
         occupiedAfterSelection.addAll(selectedSeatIds);
 
-        List<Clause> clauses = generateClauses(allSeatsInSector, rowsToCheck, maxCol);
+        List<Clause> clauses = generateClauses(allSeatsInSector, selectedRows, maxCol);
 
         Map<Integer, Boolean> assignment = new HashMap<>();
         for (Seat seat : allSeatsInSector) {
-            if (rowsToCheck.contains(seat.getRowNumber())) {
+            if (selectedRows.contains(seat.getRowNumber())) {
                 int var = toVariable(seat.getRowNumber(), seat.getSeatNumber(), maxCol);
                 assignment.put(var, occupiedAfterSelection.contains(seat.getId()));
             }
         }
 
-        boolean satisfiable = solver.isSatisfiableWithPartialAssignment(clauses, assignment);
+        boolean satisfiable = solver.solve(clauses, assignment);
 
         if (satisfiable) {
             return SeatValidationResult.ok();
         }
 
+        Set<Integer> rowsForSuggestions = new HashSet<>(selectedRows);
+        for (Integer row : selectedRows) {
+            if (row > 1)
+                rowsForSuggestions.add(row - 1);
+            if (row < maxRow)
+                rowsForSuggestions.add(row + 1);
+        }
+
         int numSelectedSeats = selectedSeatIds.size();
         List<SeatSuggestion> alternatives = findAlternatives(
-                allSeatsInSector, occupiedSeatIds, rowsToCheck, numSelectedSeats, maxCol, coordToId
+                allSeatsInSector, occupiedSeatIds, rowsForSuggestions, numSelectedSeats, maxCol, coordToId
         );
 
         if (alternatives.isEmpty()) {
@@ -152,7 +157,7 @@ public class SeatGapValidator {
                     }
                 }
 
-                if (solver.isSatisfiableWithPartialAssignment(clauses, assignment)) {
+                if (solver.solve(clauses, assignment)) {
                     suggestions.add(new SeatSuggestion(row, seq));
                 }
             }
