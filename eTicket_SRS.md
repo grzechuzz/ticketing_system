@@ -254,6 +254,54 @@ Dokument jest przeznaczony dla zespołu deweloperskiego, testerów, klientów or
       * When: Klikam przycisk "Wyślij do akceptacji".
       * Then: System zapisuje wydarzenie w bazie ze statusem "Oczekuje na weryfikację".
       * And: Organizator otrzymuje komunikat potwierdzający wysłanie zgłoszenia.
+
+**WF-03: Logowanie i rejestracja użytkowników**
+
+* **Opis:** Umożliwia tworzenie nowych kont oraz autoryzację dostępu do istniejących. 
+  
+* **Historyjka użytkownika:**
+  * Jako nowy użytkownik,
+  * chcę założyć konto oraz się zalogować,
+  * abym mógł uzyskać dostęp do systemu.
+
+* **Cel biznesowy:** Umożliwienie identyfikacji użytkowników oraz zabezpieczenie dostępu do panelu organizatora i historii zakupów użytkownika.
+  
+* **Warunki wstępne:** Użytkownik jest niezalogowany.
+
+* **Warunki końcowe:** Użytkownik zostaje uwierzytelniony, system generuje token i przekierowuje do panelu głównego.
+
+* **Kryteria akceptacji:**
+  * **WF-AUTH-A**: Pomyślna rejestracja konta (Scenariusz główny 1)
+    * Opis: Użytkownik zakłada nowe konto podając unikalny adres email.
+    * Kryteria akceptacji:
+      * Given: Jestem na formularzu rejestracji.
+      * When: Wpisuję unikalny adres email, hasło spełniające wymogi bezpieczeństwa oraz imię i nazwisko.
+      * Then: System tworzy konto w bazie danych.
+      * And: Wyświetla komunikat o udanej rejestracji i przekierowuje do logowania.
+        
+  * **WF-AUTH-B**: Próba rejestracji na istniejący w systemie email (Scenariusz alternatywny)
+    * Opis: System blokuje utworzenie duplikatu konta.
+    * Kryteria akceptacji:
+      * Given: W bazie danych istnieje już użytkownik z konkretnym adresem.
+      * When: Próbuję zarejestrować nowe konto używając tego samego adresu.
+      * Then: System blokuje operację.
+      * And: Wyświetla komunikat "Konto z tym adresem email już istnieje".
+        
+  * **WF-AUTH-C**: Pomyślne logowanie (Scenariusz główny 2)
+    * Opis: Użytkownik loguje się do systemu poprawnymi danymi.
+    * Kryteria akceptacji:
+      * Given: Posiadam aktywne konto w systemie.
+      * When:  Wpisuję poprawny login i hasło w formularzu logowania.
+      * Then: System uwierzytelnia dane i nadaje token dostępu.
+      * And:  Zostaję przekierowany na stronę główną.
+
+  * **WF-AUTH-D**: Błąd logowania (Scenariusz alternatywny)
+    * Opis: Próba logowania przy użyciu niepoprawnego hasła lub nieistniejącego emailu.
+    * Kryteria akceptacji:
+      * Given: Jestem na stronie logowania.
+      * When: Wpisuję poprawny email, ale błędne hasło (lub na odwrót).
+      * Then: System odmawia dostępu.
+      * And: Wyświetla komunikat "Błędny login lub hasło".
      
 **3.1. Priorytetyzacja wymagań**
 
