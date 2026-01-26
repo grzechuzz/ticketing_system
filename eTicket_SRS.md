@@ -271,7 +271,7 @@ Dokument jest przeznaczony dla zespołu deweloperskiego, testerów, klientów or
 * **Warunki końcowe:** Użytkownik zostaje uwierzytelniony, system generuje token i przekierowuje do panelu głównego.
 
 * **Kryteria akceptacji:**
-  * **WF-AUTH-A**: Pomyślna rejestracja konta (Scenariusz główny 1)
+  * **WF-APLIK-03-A**: Pomyślna rejestracja konta (Scenariusz główny 1)
     * Opis: Użytkownik zakłada nowe konto podając unikalny adres email.
     * Kryteria akceptacji:
       * Given: Jestem na formularzu rejestracji.
@@ -279,7 +279,7 @@ Dokument jest przeznaczony dla zespołu deweloperskiego, testerów, klientów or
       * Then: System tworzy konto w bazie danych.
       * And: Wyświetla komunikat o udanej rejestracji i przekierowuje do logowania.
         
-  * **WF-AUTH-B**: Próba rejestracji na istniejący w systemie email (Scenariusz alternatywny)
+  * **WF-APLIK-03-B**: Próba rejestracji na istniejący w systemie email (Scenariusz alternatywny)
     * Opis: System blokuje utworzenie duplikatu konta.
     * Kryteria akceptacji:
       * Given: W bazie danych istnieje już użytkownik z konkretnym adresem.
@@ -287,7 +287,7 @@ Dokument jest przeznaczony dla zespołu deweloperskiego, testerów, klientów or
       * Then: System blokuje operację.
       * And: Wyświetla komunikat "Konto z tym adresem email już istnieje".
         
-  * **WF-AUTH-C**: Pomyślne logowanie (Scenariusz główny 2)
+  * **WF-APLIK-03-C**: Pomyślne logowanie (Scenariusz główny 2)
     * Opis: Użytkownik loguje się do systemu poprawnymi danymi.
     * Kryteria akceptacji:
       * Given: Posiadam aktywne konto w systemie.
@@ -295,25 +295,90 @@ Dokument jest przeznaczony dla zespołu deweloperskiego, testerów, klientów or
       * Then: System uwierzytelnia dane i nadaje token dostępu.
       * And:  Zostaję przekierowany na stronę główną.
 
-  * **WF-AUTH-D**: Błąd logowania (Scenariusz alternatywny)
+  * **WF-APLIK-03-D**: Błąd logowania (Scenariusz alternatywny)
     * Opis: Próba logowania przy użyciu niepoprawnego hasła lub nieistniejącego emailu.
     * Kryteria akceptacji:
       * Given: Jestem na stronie logowania.
       * When: Wpisuję poprawny email, ale błędne hasło (lub na odwrót).
       * Then: System odmawia dostępu.
       * And: Wyświetla komunikat "Błędny login lub hasło".
-     
+
+**WF-04: Automatyczne generowanie biletów PDF**
+
+* **Opis:** Po poprawnym sfinalizowaniu zamówienia, system automatycznie generuje bilet w formacie PDF. Dokument zawiera kluczowe informacje o wydarzeniu oraz unikalny kod QR umożliwiający późniejszą weryfikację.
+  
+* **Historyjka użytkownika:**
+  * Jako klient,
+  * chcę otrzymać bilet w formacie PDF zaraz po dokonaniu płatności, 
+  * abym mógł go łatwo zapisać na urządzeniu mobilnym lub wydrukować przed wejściem na wydarzenie.
+
+* **Cel biznesowy:** Automatyzacja procesu dostarczania biletów.
+  
+* **Warunki wstępne:** Zamówienie zostało poprawnie opłacone.
+
+* **Warunki końcowe:**: Użytkownik ma dostęp do pliku PDF, który jest zapisany w bazie danych i przypisany do jego zamówienia.
+
+* **Kryteria akceptacji:**
+  * **WF-APLIK-04-A**: Zawartość biletu (Scenariusz główny)
+    * Opis: Wygenerowany plik zawiera wszystkie niezbędne dane.
+    * Kryteria akceptacji:
+      * Given: Zamówienie na dane wydarzenie zostało opłacone.
+      * When: System generuje plik PDF.
+      * Then: Dokument zawiera nazwę wydarzenia, datę i godzinę, lokalizację, numer miejsca/sektora oraz imię i nazwisko posiadacza (jeśli podano).
+      * And: Na bilecie znajduje się unikalny kod QR.
+        
+  * **WF-APLIK-04-B**: Pobieranie pliku (Scenariusz główny 2)
+    * Opis: Użytkownik może pobrać bilet z poziomu interfejsu.
+    * Kryteria akceptacji:
+      * Given: Plik PDF został wygenerowany.
+      * When: Klikam przycisk "Pobierz bilet" na ekranie podsumowania zamówienia lub w profilu użytkownika.
+      * Then: Przeglądarka rozpoczyna pobieranie pliku o rozszerzeniu .pdf.
+
+**WF-05: Mechanizm obsługi płatności**
+
+* **Opis:** Moduł odpowiedzialny za procesowanie transakcji finansowych. Umożliwia użytkownikowi wybór metody płatności (np. Karta płatnicza, BLIK) i sfinalizowanie zamówienia.
+  
+* **Historyjka użytkownika:**
+  * Jako klient,
+  * chcę mieć możliwość wyboru metody płatności i szybkiego opłacenia zamówienia,
+  * abym mógł sfinalizować zakup i otrzymać gwarancję rezerwacji miejsc.
+
+* **Cel biznesowy:** Automatyzacja finalizacji zamówienia, eliminująca konieczność ręcznej weryfikacji wpłat przed wysyłką biletów.
+  
+* **Warunki wstępne:** Użytkownik posiada zamówienie o statusie "AWAITING PAYMENT", a czas rezerwacji miejsc jeszcze nie upłynął.
+
+* **Warunki końcowe:**: Zamówienie otrzymuje status końcowy "PAID" (co uruchamia generowanie biletów) lub w przypadku niepowodzenia generuje błąd płatności.
+
+* **Kryteria akceptacji:**
+  * **WF-APLIK-05-A**: Pomyślna realizacja transakcji (Scenariusz główny)
+    * Opis: Proces płatności przebiega prawidłowo, środki zostają zaksięgowane.
+    * Kryteria akceptacji:
+      * Given: Użytkownik znajduje się w podsumowaniu zamówienia.
+      * When: Wybiera metodę płatności i zatwierdza transakcję.
+      * Then: System weryfikuje dostępność środków (autoryzacja pozytywna).
+      * And: Status zamówienia w bazie danych zmienia się na "PAID".
+      * And: Użytkownik zostaje przekierowany do strony potwierdzenia zakupu.
+        
+  * **WF-APLIK-05-B**: Odrzucenie transakcji (Scenariusz alternatywny)
+    * Opis: Obsługa błędu w przypadku odrzucenia płatności przez operatora.
+    * Kryteria akceptacji:
+      * Given: Użytkownik próbuje opłacić zamówienie.
+      * When: Autoryzacja płatności kończy się niepowodzeniem.
+      * Then: System wyświetla komunikat błędu: "Transakcja odrzucona. Spróbuj ponownie lub wybierz inną metodę".
+      * And: Status zamówienia pozostaje "AWAITING PAYMENT".
+      * And: Miejsca pozostają zablokowane dla użytkownika do czasu wygaśnięcia czasu rezerwacji.
+  
 **3.1. Priorytetyzacja wymagań**
 
 | ID Funkcji | Nazwa Funkcji | Korzyść | Kara | Koszt | Ryzyko | WYNIK | Decyzja MVP |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **WF-01** | **Zakup biletu (z walidacją)** | 21 | 21 | 13 | 13 | **1.61** | **TAK** |
 | **WF-02** | **Tworzenie wydarzenia** | 21 | 21 | 8 | 5 | **3.23** | **NIE** |
-| **WF-AUTH** | **Logowanie i Rejestracja** | 8 | 21 | 5 | 2 | **4.14** | **TAK** |
-| **WF-PDF** | **Generowanie biletu PDF** | 13 | 8 | 5 | 3 | **2.62** | **TAK** |
+| **WF-03** | **Logowanie i Rejestracja** | 8 | 21 | 5 | 2 | **4.14** | **TAK** |
+| **WF-04** | **Generowanie biletu PDF** | 13 | 8 | 5 | 3 | **2.62** | **TAK** |
 | **WF-STAT** | **Statystyki dla organizatora** | 5 | 2 | 3 | 2 | **1.40** | **NIE** |
 | **WF-MAIL** | **Powiadomienia E-mail** | 8 | 5 | 5 | 8 | **1.00** | **NIE** |
-| **WF-PAY** | **Symulacja płatności** | 3 | 5 | 2 | 1 | **2.66** | **TAK** |
+| **WF-05** | **Obsługa mechanizmu płatności** | 3 | 5 | 2 | 1 | **2.66** | **TAK** |
 
 ### 4. Atrybuty jakościowe 
 
