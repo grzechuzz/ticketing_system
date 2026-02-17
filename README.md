@@ -2,9 +2,10 @@
 
 **A ticketing system with intelligent seat validation powered by a SAT solver.**
 
-The goal was to design and implement a slice of a ticketing system where the core feature is a mechanism that prevents single-seat gaps from forming in rows. 
+Built as a Software Engineering course project. The goal was to design and implement a slice of a ticketing system where the core feature is a mechanism that prevents single-seat gaps from forming in rows. 
+The frontend serves as a demo UI to visualize the validation logic, while the primary focus was on the backend.
 
-The frontend is in Polish and serves as a demo UI to visualize the validation logic, while the primary focus was on the backend.
+The full Software Requirements Specification is included in the repository: [`eTicket_SRS.md`](eTicket_SRS.md) (in Polish). This project implements only a subset of the features described there.
 
 ## Implemented Features
 
