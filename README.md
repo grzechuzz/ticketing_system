@@ -55,8 +55,6 @@ If validation fails, the system searches the current and neighboring rows and re
 
 Software Archetypes: [Software Archetypes - SAT](https://github.com/Software-Archetypes/archetypes/tree/main/configurator/src/main/java/softwarearchetypes/sat)
 
-**And yeah... we realize that a simple for loop `O(n)` could solve this. But where's the fun in that? :D**
-
 ## Quick Start
 ```bash
 cp .env.example .env
